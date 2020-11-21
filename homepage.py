@@ -29,13 +29,19 @@ def turnTo():
     os.system("help.py")
 
 
+def whetherExit():
+    """詢問是否離開"""
+    whetherExitWin = tk.Tk()
+    yesBtn = tk.Button(whetherExitWin, text = "YES")
+    noBtn = tk.Button(whetherExitWin, text = "NO")
+    whetherExit.pack()
 # 主畫面建立
 win = tk.Tk()
 win.title("記帳小幫手")
 state = False
 win.geometry("1024x699+172+0")
 win.resizable(False, False)
-win.config(bg = "#DF9A57")
+win.config(bg = "#363636")
 
 # 標題建立
 title = tk.Label(win, text = "         程 式 名 稱         ")
@@ -44,7 +50,8 @@ title.pack()
 
 # 離開鍵建立
 exitBtn = tk.Button(win, text = "離開系統\nExit")
-exitBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat", activebackground = "#DF2935")
+exitBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+exitBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
 exitBtn.config(command = exit)
 # exitBtn.config(font = "微軟正黑體 15 bold", bg = "#DF9A57", fg = "black", relief = "solid", command = changeFullScreen)
 exitBtn.place(anchor = "se",x=1024, y=699)
@@ -72,9 +79,15 @@ func1.config(bg = "#DF9A57", fg = "black", relief = "flat")
 func1.place(anchor = "w", x = 786, y = 350)
 
 # 說明鍵建立
-exitBtn = tk.Button(win, text = "功能說明\nHelp")
-exitBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat", activebackground = "#DF2935")
-# exitBtn.config(command = turnTo)
-exitBtn.place(anchor = "sw",x=0, y=699)
+helpBtn = tk.Button(win, text = "功能說明\nHelp")
+helpBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+helpBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+# helpBtn.config(command = turnTo)
+helpBtn.place(anchor = "sw",x=0, y=699)
 
+# 詢問是否離開
+# whetherExitWin = tk.Tk()
+# yesBtn = tk.Button(whetherExitWin, text = "YES")
+# noBtn = tk.Button(whetherExitWin, text = "NO")
+# whetherExit.pack()
 win.mainloop()
