@@ -5,6 +5,7 @@ import os
 顏色代碼：
 #283845 夜幕藍
 #363636 微黑
+#DF9A57 金色
 """
 def changeFullScreen():
     """切換全螢幕"""
@@ -44,8 +45,8 @@ win.resizable(False, False)
 win.config(bg = "#363636")
 
 # 標題建立
-title = tk.Label(win, text = "         程 式 名 稱         ")
-title.config(font = "微軟正黑體 40 bold underline", bg = "#DF9A57")
+title = tk.Label(win, text = "         記 帳 小 幫 手         ")
+title.config(font = "微軟正黑體 40 bold", bg = "#363636", fg = "white")
 title.pack()
 
 # 離開鍵建立
