@@ -31,6 +31,11 @@ win.geometry("1024x699+172+0")
 win.resizable(False, False)
 win.config(bg = "#DF9A57")
 
+# 標題建立
+title = tk.Label(win, text = "         程 式 名 稱         ")
+title.config(font = "微軟正黑體 40 bold underline", bg = "#DF9A57")
+title.pack()
+
 # 離開鍵建立
 exitBtn = tk.Button(win, text = "離開系統\nExit")
 exitBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat", activebackground = "#DF2935")
@@ -38,24 +43,24 @@ exitBtn.config(command = exit)
 # exitBtn.config(font = "微軟正黑體 15 bold", bg = "#DF9A57", fg = "black", relief = "solid", command = changeFullScreen)
 exitBtn.place(anchor = "se",x=1024, y=699)
 
+# 功能鍵建立
 func1Img = tk.PhotoImage(file="func1.png") 
-# func1Img = "C:\\Users\\User\\Desktop\\專案圖.jpg"
-func1 = tk.Button()
+func1 = tk.Button(win)
 func1.config(image = func1Img, width = 150, height = 400, font = "微軟正黑體 30 bold")
 func1.config(bg = "#DF9A57", fg = "black", relief = "flat")
 func1.place(anchor = "w", x = 84, y = 350)
 
-func1 = tk.Button()
+func1 = tk.Button(win)
 func1.config(image = func1Img, width = 150, height = 400, font = "微軟正黑體 30 bold")
 func1.config(bg = "#DF9A57", fg = "black", relief = "flat")
 func1.place(anchor = "w", x = 318, y = 350)
 
-func1 = tk.Button()
+func1 = tk.Button(win)
 func1.config(image = func1Img, width = 150, height = 400, font = "微軟正黑體 30 bold")
 func1.config(bg = "#DF9A57", fg = "black", relief = "flat")
 func1.place(anchor = "w", x = 552, y = 350)
 
-func1 = tk.Button()
+func1 = tk.Button(win)
 func1.config(image = func1Img, width = 150, height = 400, font = "微軟正黑體 30 bold")
 func1.config(bg = "#DF9A57", fg = "black", relief = "flat")
 func1.place(anchor = "w", x = 786, y = 350)
