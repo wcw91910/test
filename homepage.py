@@ -1,5 +1,6 @@
 import tkinter as tk
 import sys
+import os
 """
 顏色代碼：
 #283845 夜幕藍
@@ -21,6 +22,11 @@ def changeFullScreen():
 def exit():
     """離開系統"""
     sys.exit()
+
+
+def turnTo():
+    """跳轉程式"""
+    os.system("help.py")
 
 
 # 主畫面建立
@@ -64,5 +70,11 @@ func1 = tk.Button(win)
 func1.config(image = func1Img, width = 150, height = 400, font = "微軟正黑體 30 bold")
 func1.config(bg = "#DF9A57", fg = "black", relief = "flat")
 func1.place(anchor = "w", x = 786, y = 350)
+
+# 說明鍵建立
+exitBtn = tk.Button(win, text = "功能說明\nHelp")
+exitBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat", activebackground = "#DF2935")
+# exitBtn.config(command = turnTo)
+exitBtn.place(anchor = "sw",x=0, y=699)
 
 win.mainloop()
