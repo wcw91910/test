@@ -1,9 +1,9 @@
 import tkinter as tk
 import sys
 import os
-from func1_png import img as func1
-from pageBackground_png import img as pageBackground
-import base64
+# from func1_png import img as func1
+# from pageBackground_png import img as pageBackground
+# import base64
 """
 顏色代碼：
 #283845 夜幕藍
@@ -12,11 +12,8 @@ import base64
 """
 
 
-
-
 def homepage():
     """主畫面"""
-
 
     # 主畫面建立
     global win
@@ -41,26 +38,31 @@ def homepage():
     exitBtn.place(anchor = "se",x=1024, y=699)
 
     # 功能鍵建立
-    func1Img = tk.PhotoImage(file="func1.png") 
+    func1Img = tk.PhotoImage(file="func1.png")
+
     func1 = tk.Button(win)
     func1.config(image = func1Img, width = 150, height = 400, font = "微軟正黑體 30 bold")
     func1.config(bg = "#DF9A57", fg = "black", relief = "flat")
+    func1.config(command = function1)
     func1.place(anchor = "w", x = 84, y = 350)
 
-    func1 = tk.Button(win)
-    func1.config(image = func1Img, width = 150, height = 400, font = "微軟正黑體 30 bold")
-    func1.config(bg = "#DF9A57", fg = "black", relief = "flat")
-    func1.place(anchor = "w", x = 318, y = 350)
+    func2 = tk.Button(win)
+    func2.config(image = func1Img, width = 150, height = 400, font = "微軟正黑體 30 bold")
+    func2.config(bg = "#DF9A57", fg = "black", relief = "flat")
+    func2.config(command = function2)
+    func2.place(anchor = "w", x = 318, y = 350)
 
-    func1 = tk.Button(win)
-    func1.config(image = func1Img, width = 150, height = 400, font = "微軟正黑體 30 bold")
-    func1.config(bg = "#DF9A57", fg = "black", relief = "flat")
-    func1.place(anchor = "w", x = 552, y = 350)
+    func3 = tk.Button(win)
+    func3.config(image = func1Img, width = 150, height = 400, font = "微軟正黑體 30 bold")
+    func3.config(bg = "#DF9A57", fg = "black", relief = "flat")
+    func3.config(command = function3)
+    func3.place(anchor = "w", x = 552, y = 350)
 
-    func1 = tk.Button(win)
-    func1.config(image = func1Img, width = 150, height = 400, font = "微軟正黑體 30 bold")
-    func1.config(bg = "#DF9A57", fg = "black", relief = "flat")
-    func1.place(anchor = "w", x = 786, y = 350)
+    func4 = tk.Button(win)
+    func4.config(image = func1Img, width = 150, height = 400, font = "微軟正黑體 30 bold")
+    func4.config(bg = "#DF9A57", fg = "black", relief = "flat")
+    func4.config(command = function4)
+    func4.place(anchor = "w", x = 786, y = 350)
 
     # 說明鍵建立
     helpBtn = tk.Button(win, text = "功能說明\nHelp")
@@ -74,6 +76,7 @@ def homepage():
 
 def changeFullScreen():
     """切換全螢幕"""
+
     global state
     state = not state
     if state == False:
@@ -156,11 +159,80 @@ def helpPage():
     helpText2.place(x = 0, y = 100)
 
 
-picData = open('func1.png', 'wb')
-picData.write(base64.b64decode(func1))
-picData.close()
-picData = open('pageBackground.png', 'wb')
-picData.write(base64.b64decode(pageBackground))
-picData.close()
+def function1():
+    """功能一"""
+    # 說明頁建立
+    global func1Background
+    func1Win = tk.Label(win)
+    func1Background = tk.PhotoImage(file="pageBackground.png")
+    func1Win.config(image = func1Background)
+    func1Win.place(x = -2, y = -1)
+
+    # 返回鍵建立
+    backBtn = tk.Button(func1Win, text = "回到首頁\nBack")
+    backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+    backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+    backBtn.config(command = func1Win.destroy)
+    backBtn.place(anchor = "se",x=1024, y=699)
+
+
+def function2():
+    """功能二"""
+    # 說明頁建立
+    global func2Background
+    func2Win = tk.Label(win)
+    func2Background = tk.PhotoImage(file="pageBackground.png")
+    func2Win.config(image = func2Background)
+    func2Win.place(x = -2, y = -1)
+
+    # 返回鍵建立
+    backBtn = tk.Button(func2Win, text = "回到首頁\nBack")
+    backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+    backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+    backBtn.config(command = func2Win.destroy)
+    backBtn.place(anchor = "se",x=1024, y=699)
+
+
+def function3():
+    """功能三"""
+    # 說明頁建立
+    global func3Background
+    func3Win = tk.Label(win)
+    func3Background = tk.PhotoImage(file="pageBackground.png")
+    func3Win.config(image = func3Background)
+    func3Win.place(x = -2, y = -1)
+
+    # 返回鍵建立
+    backBtn = tk.Button(func3Win, text = "回到首頁\nBack")
+    backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+    backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+    backBtn.config(command = func3Win.destroy)
+    backBtn.place(anchor = "se",x=1024, y=699)
+
+
+def function4():
+    """功能四"""
+    # 說明頁建立
+    global func4Background
+    func4Win = tk.Label(win)
+    func4Background = tk.PhotoImage(file="pageBackground.png")
+    func4Win.config(image = func4Background)
+    func4Win.place(x = -2, y = -1)
+
+    # 返回鍵建立
+    backBtn = tk.Button(func4Win, text = "回到首頁\nBack")
+    backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+    backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+    backBtn.config(command = func4Win.destroy)
+    backBtn.place(anchor = "se",x=1024, y=699)
+
+
+# 方便pyinstaller將圖片攜帶
+# picData = open('func1.png', 'wb')
+# picData.write(base64.b64decode(func1))
+# picData.close()
+# picData = open('pageBackground.png', 'wb')
+# picData.write(base64.b64decode(pageBackground))
+# picData.close()
 
 homepage()
