@@ -9,7 +9,10 @@ import os
 """
 def homepage():
     """主畫面"""
+
+
     # 主畫面建立
+    global win
     win = tk.Tk()
     win.title("記帳小幫手")
     state = False
@@ -56,6 +59,7 @@ def homepage():
     helpBtn = tk.Button(win, text = "功能說明\nHelp")
     helpBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
     helpBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+    helpBtn.config(command = helpPage)
     helpBtn.place(anchor = "sw",x=0, y=699)
 
     win.mainloop()
@@ -81,16 +85,20 @@ def exit():
 
 def whetherExit():
     """詢問是否離開"""
+
+    # 確認是否離開畫面
     whetherExitWin = tk.Label()
     whetherExitWin.config(text = "您確定要離開系統嗎？\n", font = "微軟正黑體 40 bold", bg = "#99B2DD")
     whetherExitWin.config(width = 18, height = 4)
 
+    # YES鍵
     yesBtn = tk.Button(whetherExitWin, text = "YES")
     yesBtn.config(font = "微軟正黑體 30 bold", bg = "#F3BB91", fg = "red", activebackground = "yellow")
     yesBtn.config(relief = "flat")
     yesBtn.config(command = exit)
     yesBtn.place(anchor = "center", x = 200, y = 200)
-
+    
+    # NO鍵
     noBtn = tk.Button(whetherExitWin, text = "NO")
     noBtn.config(font = "微軟正黑體 30 bold", bg = "#F3BB91", fg = "blue", activebackground = "yellow")
     noBtn.config(relief = "flat")
@@ -99,5 +107,45 @@ def whetherExit():
 
     whetherExitWin.place(anchor = "center", x = 512, y = 350)
 
+
+def helpPage():
+    """說明頁"""
+    # 說明頁建立
+    global helpBackground
+    helpWin = tk.Label(win)
+    helpBackground = tk.PhotoImage(file="page-background.png")
+    helpWin.config(image = helpBackground)
+    helpWin.place(x = -2, y = -1)
+
+    # 返回鍵建立
+    backBtn = tk.Button(helpWin, text = "回到首頁\nBack")
+    backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+    backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+    backBtn.config(command = helpWin.destroy)
+    backBtn.place(anchor = "se",x=1024, y=699)
+
+    # 說明文字建立
+    helpText1 = tk.Label(helpWin, text = "  Lorem Ipsum")
+    helpText1.config(font = "微軟正黑體 35 bold", bg = "#363636", fg = "white")
+
+    helpText2 = tk.Label(helpWin, text = """    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+    Vestibulum eget porta ante. Nunc in massa eu arcu lacinia suscipit.
+    Vestibulum scelerisque est in aliquam aliquet.
+    Vestibulum quam orci, vestibulum sed tellus sit amet, suscipit lobortis leo.
+    Nullam varius venenatis dui, eu ornare enim pulvinar quis.
+    Aenean a quam eu arcu cursus fermentum vitae id dui.
+    Interdum et malesuada fames ac ante ipsum primis in faucibus.
+    Integer urna diam, imperdiet sed est vel, lobortis pharetra neque.
+    Nulla non leo vel erat interdum scelerisque vel vel magna.
+    Quisque euismod nisi commodo tortor pulvinar, vulputate mattis dui condimentum.
+    Mauris gravida turpis quam, sed luctus tellus commodo vitae.
+    Vivamus enim sapien, luctus ullamcorper nisl vel, gravida aliquam risus.
+    Vivamus mattis ut diam at egestas.
+    Vestibulum a nibh a ipsum dignissim euismod vitae sit amet metus.
+    Fusce at ullamcorper dui.""")
+    helpText2.config(font = "微軟正黑體 18 bold", bg = "#363636", fg = "white", justify = "left")
+
+    helpText1.place(x = 0, y = 20)
+    helpText2.place(x = 0, y = 100)
 
 homepage()
