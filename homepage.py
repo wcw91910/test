@@ -1,12 +1,19 @@
 import tkinter as tk
 import sys
 import os
+from func1_png import img as func1
+from pageBackground_png import img as pageBackground
+import base64
 """
 顏色代碼：
 #283845 夜幕藍
 #363636 微黑
 #DF9A57 金色
 """
+
+
+
+
 def homepage():
     """主畫面"""
 
@@ -113,7 +120,7 @@ def helpPage():
     # 說明頁建立
     global helpBackground
     helpWin = tk.Label(win)
-    helpBackground = tk.PhotoImage(file="page-background.png")
+    helpBackground = tk.PhotoImage(file="pageBackground.png")
     helpWin.config(image = helpBackground)
     helpWin.place(x = -2, y = -1)
 
@@ -147,5 +154,13 @@ def helpPage():
 
     helpText1.place(x = 0, y = 20)
     helpText2.place(x = 0, y = 100)
+
+
+picData = open('func1.png', 'wb')
+picData.write(base64.b64decode(func1))
+picData.close()
+picData = open('pageBackground.png', 'wb')
+picData.write(base64.b64decode(pageBackground))
+picData.close()
 
 homepage()
