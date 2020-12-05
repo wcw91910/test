@@ -9,24 +9,64 @@ import os
 #283845 夜幕藍
 #363636 微黑
 #DF9A57 金色
+文字大小為微軟正黑58粗體
 """
 
 
+
 def login():
+    """登入畫面"""
+    # 背景頁建立
     loginWin = tk.Frame(win)
     loginWin.config(width = 1024, height = 699, bg = "#363636")
     loginWin.place(x = 0, y = 0)
 
+    # 用戶輸入欄
+    userTitle = tk.Label(text = "電郵地址或用戶名稱")
+    userTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
+    userTitle.place(anchor = "w", x = 300, y = 220)
+    user = tk.Entry()
+    userText = tk.StringVar()
+    user.config(textvariable = userText, width = 38, font = "arial 14")
+    user.place(anchor = "w", x = 300, y = 250)
+
+    # 密碼欄
+    passwordTitle = tk.Label(text = "密碼")
+    passwordTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
+    passwordTitle.place(anchor = "w", x = 300, y = 300)
+    password = tk.Entry()
+    passwordText = tk.StringVar()
+    password.config(textvariable = passwordText, width = 38, font = "arial 14", show = "*")
+    password.place(anchor = "w", x = 300, y = 330)
+
     # 登入鍵
-    loginBtn = tk.Button(loginWin, text = "登入")
-    loginBtn.config(command = homepage)
-    loginBtn.place(anchor = "center", x = 512, y = 350)
+    global loginInImg
+    loginInImg = tk.PhotoImage(file = "登入鍵.png")
+    loginBtn = tk.Button(loginWin)
+    loginBtn.config(image = loginInImg, relief = "flat", width = 450, height = 36)
+    loginBtn.config(cursor = "hand2")
+    loginBtn.place(anchor = "center", x = 512, y = 400)
+
+    # 未註冊帳戶提示
+    global notSignUpImg
+    notSignUpImg = tk.PhotoImage(file = "未註冊帳戶.png")
+    loginBtn = tk.Label(loginWin)
+    loginBtn.config(image = notSignUpImg, relief = "flat", width = 450, height = 74)
+    loginBtn.place(anchor = "center", x = 512, y = 503)
+
+    # 註冊鍵
+    global signUpImg
+    signUpImg = tk.PhotoImage(file = "註冊鍵.png")
+    loginBtn = tk.Button(loginWin)
+    loginBtn.config(image = signUpImg, relief = "flat", width = 450, height = 36)
+    loginBtn.config(cursor = "hand2")
+    loginBtn.place(anchor = "center", x = 512, y = 570)
 
     # 離開鍵
     exitBtn = tk.Button(loginWin, text = "離開系統\nExit")
     exitBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
     exitBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
-    exitBtn.config(command = whetherExit)
+    exitBtn.config(command = whetherExit, cursor = "hand2")
     exitBtn.place(anchor = "se",x=1024, y=699)
 
 
@@ -41,14 +81,14 @@ def homepage():
 
     # 標題建立
     title = tk.Label(homeWin, text = "NTU  Coin")
-    title.config(font = "微軟正黑體 40 bold", bg = "#363636", fg = "white")
+    title.config(font = "微軟正黑體 45 bold", bg = "#363636", fg = "white")
     title.place(anchor = "n",x=512, y=20)
 
     # 離開鍵建立
     exitBtn = tk.Button(homeWin, text = "離開系統\nExit")
     exitBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
     exitBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
-    exitBtn.config(command = whetherExit)
+    exitBtn.config(command = whetherExit, cursor = "hand2")
     # exitBtn.config(font = "微軟正黑體 15 bold", bg = "#DF9A57", fg = "black", relief = "solid", command = changeFullScreen)
     exitBtn.place(anchor = "se",x=1024, y=699)
 
@@ -63,19 +103,19 @@ def homepage():
     exchange = tk.Button(homeWin)
     exchange.config(image = exchangeImg, width = 150, height = 400)
     exchange.config(relief = "flat")
-    exchange.config(command = exchangeSys)
+    exchange.config(command = exchangeSys, cursor = "hand2")
     exchange.place(anchor = "w", x = 143, y = 350)
 
     task = tk.Button(homeWin)
     task.config(image = taskImg, width = 150, height = 400)
     task.config(relief = "flat")
-    task.config(command = taskSys)
+    task.config(command = taskSys, cursor = "hand2")
     task.place(anchor = "w", x = 437, y = 350)
 
     record = tk.Button(homeWin)
     record.config(image = recordImg, width = 150, height = 400)
     record.config(relief = "flat")
-    record.config(command = recordSys)
+    record.config(command = recordSys, cursor = "hand2")
     record.place(anchor = "w", x = 731, y = 350)
 
     # func4 = tk.Button(homeWin)
@@ -88,7 +128,7 @@ def homepage():
     helpBtn = tk.Button(homeWin, text = "功能說明\nHelp")
     helpBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
     helpBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
-    helpBtn.config(command = helpPage)
+    helpBtn.config(command = helpPage, cursor = "hand2")
     helpBtn.place(anchor = "sw",x=0, y=699)
 
 
@@ -131,14 +171,14 @@ def whetherExit():
     yesBtn = tk.Button(whetherExitWin, text = "YES")
     yesBtn.config(font = "微軟正黑體 30 bold", bg = "#F3BB91", fg = "red", activebackground = "yellow")
     yesBtn.config(relief = "flat")
-    yesBtn.config(command = exit)
+    yesBtn.config(command = exit, cursor = "hand2")
     yesBtn.place(anchor = "center", x = 200, y = 200)
     
     # NO鍵
     noBtn = tk.Button(whetherExitWin, text = "NO")
     noBtn.config(font = "微軟正黑體 30 bold", bg = "#F3BB91", fg = "blue", activebackground = "yellow")
     noBtn.config(relief = "flat")
-    noBtn.config(command = whetherExitWin.destroy)
+    noBtn.config(command = whetherExitWin.destroy, cursor = "hand2")
     noBtn.place(anchor = "center", x = 390, y = 200)
 
     whetherExitWin.place(anchor = "center", x = 512, y = 350)
@@ -146,44 +186,38 @@ def whetherExit():
 
 def helpPage():
     """說明頁"""
-    # 說明頁建立
+    # 背景頁建立
     helpWin = tk.Frame(homeWin)
     helpWin.config(width = 1024, height = 699, bg = "#363636")
     helpWin.place(x = 0, y = 0)
+
     # 返回鍵建立
     backBtn = tk.Button(helpWin, text = "回到首頁\nBack")
     backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
     backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
-    backBtn.config(command = helpWin.destroy)
+    backBtn.config(command = helpWin.destroy, cursor = "hand2")
     backBtn.place(anchor = "se",x=1024, y=699)
 
     # 說明文字建立
-    helpText1 = tk.Label(helpWin, text = "  Lorem Ipsum")
-    helpText1.config(font = "微軟正黑體 35 bold", bg = "#363636", fg = "white")
+    helpText1 = tk.Label(helpWin, text = "  NTU Coin")
+    helpText1.config(font = "微軟正黑體 45 bold", bg = "#363636", fg = "white")
 
-    helpText2 = tk.Label(helpWin, text = """    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-    Vestibulum eget porta ante. Nunc in massa eu arcu lacinia suscipit.
-    Vestibulum scelerisque est in aliquam aliquet.
-    Vestibulum quam orci, vestibulum sed tellus sit amet, suscipit lobortis leo.
-    Nullam varius venenatis dui, eu ornare enim pulvinar quis.
-    Aenean a quam eu arcu cursus fermentum vitae id dui.
-    Interdum et malesuada fames ac ante ipsum primis in faucibus.
-    Integer urna diam, imperdiet sed est vel, lobortis pharetra neque.
-    Nulla non leo vel erat interdum scelerisque vel vel magna.
-    Quisque euismod nisi commodo tortor pulvinar, vulputate mattis dui condimentum.
-    Mauris gravida turpis quam, sed luctus tellus commodo vitae.
-    Vivamus enim sapien, luctus ullamcorper nisl vel, gravida aliquam risus.
-    Vivamus mattis ut diam at egestas.
-    Vestibulum a nibh a ipsum dignissim euismod vitae sit amet metus.
-    Fusce at ullamcorper dui.""")
-    helpText2.config(font = "微軟正黑體 18 bold", bg = "#363636", fg = "white", justify = "left")
+    helpText2 = tk.Label(helpWin, text = """
+    NTU Coin 使得臺大教職員生交易更便利！舉凡是\n
+    臺大內部需要付錢的地方（學餐、小福、便利商店\n
+    、停車費、影印費、販賣機等等），皆可使用NTU \n
+    Coin 進行支付。同時，大多數臺大周圍的餐廳、\n
+    店家也接受NTU Coin。NTU Coin 由臺大校方負責\n
+    發行及兌換，以確保NTU Coin的可流通性。
+    """)
+    helpText2.config(font = "微軟正黑體 24 bold", bg = "#363636", fg = "white", justify = "left")
 
     helpText1.place(x = 0, y = 20)
     helpText2.place(x = 0, y = 100)
 
 
 def exchangeSys():
-    """功能一"""
+    """貨幣交換系統"""
     # 背景頁建立
     exchangeSysWin = tk.Frame(homeWin)
     exchangeSysWin.config(width = 1024, height = 699, bg = "#363636")
@@ -193,12 +227,12 @@ def exchangeSys():
     backBtn = tk.Button(exchangeSysWin, text = "回到首頁\nBack")
     backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
     backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
-    backBtn.config(command = exchangeSysWin.destroy)
+    backBtn.config(command = exchangeSysWin.destroy, cursor = "hand2")
     backBtn.place(anchor = "se",x=1024, y=699)
 
 
 def taskSys():
-    """功能二"""
+    """任務系統"""
     # 說明頁建立
     taskSysWin = tk.Frame(homeWin)
     taskSysWin.config(width = 1024, height = 699, bg = "#363636")
@@ -208,12 +242,12 @@ def taskSys():
     backBtn = tk.Button(taskSysWin, text = "回到首頁\nBack")
     backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
     backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
-    backBtn.config(command = taskSysWin.destroy)
+    backBtn.config(command = taskSysWin.destroy, cursor = "hand2")
     backBtn.place(anchor = "se",x=1024, y=699)
 
 
 def recordSys():
-    """功能三"""
+    """記錄系統"""
     # 說明頁建立
     recordSysWin = tk.Frame(homeWin)
     recordSysWin.config(width = 1024, height = 699, bg = "#363636")
@@ -223,7 +257,7 @@ def recordSys():
     backBtn = tk.Button(recordSysWin, text = "回到首頁\nBack")
     backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
     backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
-    backBtn.config(command = recordSysWin.destroy)
+    backBtn.config(command = recordSysWin.destroy, cursor = "hand2")
     backBtn.place(anchor = "se",x=1024, y=699)
 
 
@@ -250,6 +284,7 @@ def function4():
 # picData.write(base64.b64decode(pageBackground))
 # picData.close()
 
+# 建立視窗
 win = tk.Tk()
 win.title("NTU Coin")
 state = False
