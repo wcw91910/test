@@ -12,8 +12,6 @@ import os
 文字大小為微軟正黑58粗體
 """
 
-
-
 def login():
     """登入畫面"""
     # 背景頁建立
@@ -162,27 +160,42 @@ def signUp():
 
 
 def checkSignUpInfo():
-    userName = userText.get()
-    password1 = passwordText.get()
-    password2 = confirmText.get()
-    if len(userName) > 12  and password1 != password2:
-        warning = tk.Label(signUpWin, text = "❕ 用戶名稱不符合規範")
-        warning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
-        warning.place(anchor = "w", x = 300, y = 470)
-
-        passwordWarning = tk.Label(signUpWin, text = "❕ 兩次密碼不相同")
-        passwordWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
-        passwordWarning.place(anchor = "w", x = 300, y = 385)
-    elif len(userName) > 12:
-        warning = tk.Label(signUpWin, text = "❕ 用戶名稱不符合規範")
-        warning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
-        warning.place(anchor = "w", x = 300, y = 470)
-    elif password1 != password2:
-        passwordWarning = tk.Label(signUpWin, text = "❕ 兩次密碼不相同")
-        passwordWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
-        passwordWarning.place(anchor = "w", x = 300, y = 385)
+    global nameWarning
+    global passwordWarning
+    try:
+        passwordWarning.destroy()
+    except:
+        try:
+            nameWarning.destroy()
+        except:
+            pass
     else:
-        login()
+        try:
+            nameWarning.destroy()
+        except:
+            pass
+    finally:
+        userName = userText.get()
+        password1 = passwordText.get()
+        password2 = confirmText.get()
+        if len(userName) > 12  and password1 != password2:
+            nameWarning = tk.Label(signUpWin, text = "❕ 用戶名稱不符合規範")
+            nameWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
+            nameWarning.place(anchor = "w", x = 300, y = 465)
+
+            passwordWarning = tk.Label(signUpWin, text = "❕ 兩次密碼不相同")
+            passwordWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
+            passwordWarning.place(anchor = "w", x = 300, y = 385)
+        elif len(userName) > 12:
+            nameWarning = tk.Label(signUpWin, text = "❕ 用戶名稱不符合規範")
+            nameWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
+            nameWarning.place(anchor = "w", x = 300, y = 465)
+        elif password1 != password2:
+            passwordWarning = tk.Label(signUpWin, text = "❕ 兩次密碼不相同")
+            passwordWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
+            passwordWarning.place(anchor = "w", x = 300, y = 385)
+        else:
+            login()
 
 
 def homepage():
