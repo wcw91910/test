@@ -17,50 +17,58 @@ import os
 def login():
     """登入畫面"""
     # 背景頁建立
+    global loginWin
     loginWin = tk.Frame(win)
     loginWin.config(width = 1024, height = 699, bg = "#363636")
     loginWin.place(x = 0, y = 0)
 
+    # 標題建立
+    global ntuCoinImg
+    ntuCoinImg = tk.PhotoImage(file = "ntucoin.png")
+    title = tk.Label(loginWin)
+    title.config(image = ntuCoinImg, width = 450, height = 88)
+    title.place(anchor = "n",x=512, y=50)
+
     # 用戶輸入欄
-    userTitle = tk.Label(text = "電郵地址或用戶名稱")
+    userTitle = tk.Label(loginWin, text = "電郵地址或用戶名稱")
     userTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
-    userTitle.place(anchor = "w", x = 300, y = 220)
-    user = tk.Entry()
+    userTitle.place(anchor = "w", x = 300, y = 200)
+    user = tk.Entry(loginWin)
     userText = tk.StringVar()
     user.config(textvariable = userText, width = 38, font = "arial 14")
-    user.place(anchor = "w", x = 300, y = 250)
+    user.place(anchor = "w", x = 300, y = 230)
 
     # 密碼欄
-    passwordTitle = tk.Label(text = "密碼")
+    passwordTitle = tk.Label(loginWin, text = "密碼")
     passwordTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
-    passwordTitle.place(anchor = "w", x = 300, y = 300)
-    password = tk.Entry()
+    passwordTitle.place(anchor = "w", x = 300, y = 280)
+    password = tk.Entry(loginWin)
     passwordText = tk.StringVar()
-    password.config(textvariable = passwordText, width = 38, font = "arial 14", show = "*")
-    password.place(anchor = "w", x = 300, y = 330)
+    password.config(textvariable = passwordText, width = 38, font = "arial 14", show = "●")
+    password.place(anchor = "w", x = 300, y = 310)
 
     # 登入鍵
     global loginInImg
     loginInImg = tk.PhotoImage(file = "登入鍵.png")
     loginBtn = tk.Button(loginWin)
     loginBtn.config(image = loginInImg, relief = "flat", width = 450, height = 36)
-    loginBtn.config(cursor = "hand2")
-    loginBtn.place(anchor = "center", x = 512, y = 400)
+    loginBtn.config(command = homepage, cursor = "hand2")
+    loginBtn.place(anchor = "center", x = 512, y = 370)
 
     # 未註冊帳戶提示
     global notSignUpImg
     notSignUpImg = tk.PhotoImage(file = "未註冊帳戶.png")
     loginBtn = tk.Label(loginWin)
     loginBtn.config(image = notSignUpImg, relief = "flat", width = 450, height = 74)
-    loginBtn.place(anchor = "center", x = 512, y = 503)
+    loginBtn.place(anchor = "center", x = 512, y = 483)
 
     # 註冊鍵
     global signUpImg
     signUpImg = tk.PhotoImage(file = "註冊鍵.png")
     loginBtn = tk.Button(loginWin)
     loginBtn.config(image = signUpImg, relief = "flat", width = 450, height = 36)
-    loginBtn.config(cursor = "hand2")
-    loginBtn.place(anchor = "center", x = 512, y = 570)
+    loginBtn.config(command = signUp, cursor = "hand2")
+    loginBtn.place(anchor = "center", x = 512, y = 550)
 
     # 離開鍵
     exitBtn = tk.Button(loginWin, text = "離開系統\nExit")
@@ -68,6 +76,96 @@ def login():
     exitBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
     exitBtn.config(command = whetherExit, cursor = "hand2")
     exitBtn.place(anchor = "se",x=1024, y=699)
+
+
+def signUp():
+    """註冊頁面"""
+    # 背景頁建立
+    signUpWin = tk.Frame(loginWin)
+    signUpWin.config(width = 1024, height = 699, bg = "#363636")
+    signUpWin.place(x = 0, y = 0)
+
+    # 標題建立
+    global ntuCoinImg
+    ntuCoinImg = tk.PhotoImage(file = "ntucoin.png")
+    title = tk.Label(signUpWin)
+    title.config(image = ntuCoinImg, width = 450, height = 88)
+    title.place(anchor = "n",x=512, y=20)
+
+    sign = tk.Label(signUpWin, text = "以電子郵件地址註冊")
+    sign.config(font = "微軟正黑體 20 bold", bg = "#363636", fg = "white")
+    sign.place(anchor = "center", x = 512, y = 130)
+
+    # 輸入電子信箱欄
+    mailTitle = tk.Label(signUpWin, text = "您的電子郵件地址是什麼？")
+    mailTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
+    mailTitle.place(anchor = "w", x = 300, y = 170)
+    mail = tk.Entry(signUpWin)
+    mailText = tk.StringVar()
+    mail.config(textvariable = mailText, width = 38, font = "arial 14")
+    mail.place(anchor = "w", x = 300, y = 200)
+
+    # 建立密碼
+    passwordTitle = tk.Label(signUpWin, text = "建立密碼")
+    passwordTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
+    passwordTitle.place(anchor = "w", x = 300, y = 250)
+    password = tk.Entry(signUpWin)
+    passwordText = tk.StringVar()
+    password.config(textvariable = passwordText, width = 38, font = "arial 14", show = "●")
+    password.place(anchor = "w", x = 300, y = 280)
+
+    # 確認密碼
+    confirmTitle = tk.Label(signUpWin, text = "確認密碼")
+    confirmTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
+    confirmTitle.place(anchor = "w", x = 300, y = 330)
+    confirm = tk.Entry(signUpWin)
+    confirmText = tk.StringVar()
+    confirm.config(textvariable = confirmText, width = 38, font = "arial 14", show = "●")
+    confirm.place(anchor = "w", x = 300, y = 360)
+
+    passwordWarning = tk.Label(signUpWin, text = "❕ 兩次密碼不相同")
+    passwordWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
+    passwordWarning.place(anchor = "w", x = 300, y = 385)
+
+    # 用戶名稱
+    userTitle = tk.Label(signUpWin, text = "用戶名稱（12個字元以下）")
+    userTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
+    userTitle.place(anchor = "w", x = 300, y = 410)
+    user = tk.Entry(signUpWin)
+    userText = tk.StringVar()
+    user.config(textvariable = userText, width = 38, font = "arial 14")
+    user.place(anchor = "w", x = 300, y = 440)
+
+    # username = user.get()
+    # if len(username) > 12:
+    nameWarning = tk.Label(signUpWin, text = "❕ 用戶名稱不符合規範")
+    nameWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
+    nameWarning.place(anchor = "w", x = 300, y = 465)
+
+    # 註冊鍵
+    global signUpImg
+    signUpImg = tk.PhotoImage(file = "註冊鍵.png")
+    loginBtn = tk.Button(signUpWin)
+    loginBtn.config(image = signUpImg, relief = "flat", width = 450, height = 36)
+    loginBtn.config(command = login, cursor = "hand2")
+    loginBtn.place(anchor = "center", x = 512, y = 520)
+
+    username = userText.get()
+    # if len(username) > 12:
+    #     warning = tk.Label(signUpWin, text = "❕ 用戶名稱不符合規範")
+    #     warning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
+    #     warning.place(anchor = "w", x = 300, y = 470)
+
+    # 已經有帳戶了？
+    haveAnAccountTitle = tk.Label(signUpWin, text = "已經有帳戶了？")
+    haveAnAccountTitle.config(font = "微軟正黑體 22 bold", bg = "#363636", fg = "white")
+    haveAnAccountTitle.place(anchor = "center", x = 512, y = 600)
+
+    haveAnAccountBtn = tk.Button(signUpWin, text = "登入 > ")
+    haveAnAccountBtn.config(font = "微軟正黑體 16 bold underline", bg = "#363636", fg = "#0066CC")
+    haveAnAccountBtn.config(relief = "flat", activebackground = "#363636", activeforeground = "white")
+    haveAnAccountBtn.config(command = login, cursor = "hand2")
+    haveAnAccountBtn.place(anchor = "center", x = 512, y = 640)
 
 
 def homepage():
@@ -80,8 +178,10 @@ def homepage():
 
 
     # 標題建立
-    title = tk.Label(homeWin, text = "NTU  Coin")
-    title.config(font = "微軟正黑體 45 bold", bg = "#363636", fg = "white")
+    global ntuCoinImg
+    title = tk.PhotoImage(file = "ntucoin.png")
+    title = tk.Label(homeWin)
+    title.config(image = ntuCoinImg, width = 450, height = 88)
     title.place(anchor = "n",x=512, y=20)
 
     # 離開鍵建立
