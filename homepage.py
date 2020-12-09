@@ -11,6 +11,7 @@ import re
 #363636 微黑
 #DF9A57 金色
 文字大小為微軟正黑58粗體
+系統按鍵字體為微軟正黑70粗體
 """
 
 def login():
@@ -193,6 +194,7 @@ def signUp():
     nameWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
     nameWarning.place(anchor = "w", x = 300, y = 465)
 
+
 def checkSignUpInfo():
     """檢查輸入的資訊是否符合規則"""
     mail = mailText.get()
@@ -266,34 +268,37 @@ def homepage():
     # 功能鍵建立
     global exchangeImg
     global taskImg
+    global valueImg
     global recordImg
     exchangeImg = tk.PhotoImage(file = "貨幣交換.png")
     taskImg = tk.PhotoImage(file = "任務.png")
+    valueImg = tk.PhotoImage(file = "儲值.png")
     recordImg = tk.PhotoImage(file = "記錄查詢.png")
 
     exchange = tk.Button(homeWin)
     exchange.config(image = exchangeImg, width = 150, height = 400)
     exchange.config(relief = "flat")
     exchange.config(command = exchangeSys, cursor = "hand2")
-    exchange.place(anchor = "w", x = 143, y = 350)
+    exchange.place(anchor = "w", x = 85, y = 350)
 
     task = tk.Button(homeWin)
     task.config(image = taskImg, width = 150, height = 400)
     task.config(relief = "flat")
     task.config(command = taskSys, cursor = "hand2")
-    task.place(anchor = "w", x = 437, y = 350)
+    task.place(anchor = "w", x = 320, y = 350)
+
+    value = tk.Button(homeWin)
+    value.config(image = valueImg, width = 150, height = 400)
+    value.config(relief = "flat")
+    value.config(command = valueSys, cursor = "hand2")
+    value.place(anchor = "w", x = 554, y = 350)
 
     record = tk.Button(homeWin)
     record.config(image = recordImg, width = 150, height = 400)
     record.config(relief = "flat")
     record.config(command = recordSys, cursor = "hand2")
-    record.place(anchor = "w", x = 731, y = 350)
+    record.place(anchor = "w", x = 789, y = 350)
 
-    # func4 = tk.Button(homeWin)
-    # func4.config(image = func1Img, width = 150, height = 400, font = "微軟正黑體 30 bold")
-    # func4.config(bg = "#DF9A57", fg = "black", relief = "flat")
-    # func4.config(command = function4)
-    # func4.place(anchor = "w", x = 786, y = 350)
 
     # 說明鍵建立
     helpBtn = tk.Button(homeWin, text = "功能說明\nHelp")
@@ -417,9 +422,104 @@ def taskSys():
     backBtn.place(anchor = "se",x=1024, y=699)
 
 
+def valueSys():
+    """儲值系統"""
+    # 背景頁建立
+    global valueSysWin
+    valueSysWin = tk.Frame(homeWin)
+    valueSysWin.config(width = 1024, height = 699, bg = "#363636")
+    valueSysWin.place(x = 0, y = 0)
+
+    # 返回鍵建立
+    backBtn = tk.Button(valueSysWin, text = "回到首頁\nBack")
+    backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+    backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+    backBtn.config(command = valueSysWin.destroy, cursor = "hand2")
+    backBtn.place(anchor = "se",x=1024, y=699)
+
+    # 標題
+    title = tk.Label(valueSysWin, text = "儲值系統")
+    title.config(font = "微軟正黑體 48 bold", bg = "#363636", fg = "white")
+    title.place(anchor = "center", x = 512, y = 60)
+
+    # 儲值NTU Coin
+    global Img_valueSys_addValue
+    Img_valueSys_addValue = tk.PhotoImage(file = "儲值NTUCoin.png")
+    addVauleBtn = tk.Button(valueSysWin)
+    addVauleBtn.config(image = Img_valueSys_addValue, width = 790, height = 140)
+    addVauleBtn.config(relief = "flat", cursor = "hand2", command = valueSys_moneyEntry)
+    addVauleBtn.place(anchor = "center", x = 512, y = 250)
+
+    # 兌換成錢
+    global Img_valueSys_exchange
+    Img_valueSys_exchange = tk.PhotoImage(file = "兌換成錢.png")
+    exchangeBtn = tk.Button(valueSysWin)
+    exchangeBtn.config(image = Img_valueSys_exchange, width = 790, height = 140)
+    exchangeBtn.config(relief = "flat", cursor = "hand2", command = valueSys_moneyEntry)
+    exchangeBtn.place(anchor = "center", x = 512, y = 440)
+
+
+def valueSys_moneyEntry():
+    """儲值系統"""
+    # 背景頁建立
+    moneyEntryWin = tk.Frame(valueSysWin)
+    moneyEntryWin.config(width = 1024, height = 699, bg = "#363636")
+    moneyEntryWin.place(x = 0, y = 0)
+
+    # 返回鍵建立
+    backBtn = tk.Button(moneyEntryWin, text = "回到上頁\nBack")
+    backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+    backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+    backBtn.config(command = moneyEntryWin.destroy, cursor = "hand2")
+    backBtn.place(anchor = "se",x=1024, y=699)
+
+    # 標題
+    title = tk.Label(moneyEntryWin, text = "儲值系統")
+    title.config(font = "微軟正黑體 48 bold", bg = "#363636", fg = "white")
+    title.place(anchor = "center", x = 512, y = 60)
+
+    # 金額輸入
+    money = tk.Label(moneyEntryWin, text = "輸入金額")
+    money.config(font = "微軟正黑體 30 bold", bg = "#363636", fg = "white")
+    money.place(anchor = "center", x = 512, y = 290)
+
+    global moneyEntryText
+    moneyEntry = tk.Entry(moneyEntryWin)
+    moneyEntryText = tk.StringVar()
+    moneyEntry.config(font = "arial 30", width = 20, textvariable = moneyEntryText)
+    moneyEntry.place(anchor = "center", x= 512, y = 350)
+
+    # 確認鍵
+    global sureImg
+    sureImg = tk.PhotoImage(file = "確認.png")
+    sureBtn = tk.Button(moneyEntryWin)
+    sureBtn.config(image = sureImg, relief = "flat", width = 450, height = 36)
+    sureBtn.config(command = valueSys_moneyEntry_check, cursor = "hand2")
+    sureBtn.place(anchor = "center", x = 512, y = 430)
+
+    # 錯誤信息
+    global moneyEntryW
+    moneyEntryW = tk.StringVar()
+    moneyEntryW.set("")
+    moneyEntryWarning = tk.Label(moneyEntryWin, textvariable = moneyEntryW)
+    moneyEntryWarning.config(font = "微軟正黑體 12", bg = "#363636", fg = "red")
+    moneyEntryWarning.place(anchor = "center", x = 512, y = 393)
+
+
+def valueSys_moneyEntry_check():
+    try:
+        data = moneyEntryText.get()
+        data = eval(data)
+        valueSysWin.destroy()
+    except:
+        data = moneyEntryText.get()
+        moneyEntryW.set("❕ 請輸入正整數")
+
+
+
 def recordSys():
     """記錄系統"""
-    # 說明頁建立
+    # 背景頁建立
     recordSysWin = tk.Frame(homeWin)
     recordSysWin.config(width = 1024, height = 699, bg = "#363636")
     recordSysWin.place(x = 0, y = 0)
@@ -432,19 +532,6 @@ def recordSys():
     backBtn.place(anchor = "se",x=1024, y=699)
 
 
-def function4():
-    """功能四"""
-    # 說明頁建立
-    func4Win = tk.Frame(homeWin)
-    func4Win.config(width = 1024, height = 699, bg = "#363636")
-    func4Win.place(x = 0, y = 0)
-
-    # 返回鍵建立
-    backBtn = tk.Button(func4Win, text = "回到首頁\nBack")
-    backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
-    backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
-    backBtn.config(command = func4Win.destroy)
-    backBtn.place(anchor = "se",x=1024, y=699)
 
 
 # 方便pyinstaller將圖片攜帶
