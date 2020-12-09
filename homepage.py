@@ -511,11 +511,12 @@ def valueSys_moneyEntry_check():
     try:
         data = moneyEntryText.get()
         data = eval(data)
-        valueSysWin.destroy()
+        if data > 0:
+            valueSysWin.destroy()
+        else:
+            moneyEntryW.set("❕ 請輸入正整數")
     except:
-        data = moneyEntryText.get()
         moneyEntryW.set("❕ 請輸入正整數")
-
 
 
 def recordSys():
