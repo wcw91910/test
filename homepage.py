@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import ttk
 import sys
 import os
 import re
@@ -533,8 +534,64 @@ def recordSys():
     backBtn.config(command = recordSysWin.destroy, cursor = "hand2")
     backBtn.place(anchor = "se",x=1024, y=699)
 
+    # 標題
+    title = tk.Label(recordSysWin, text = "記錄查詢")
+    title.config(font = "微軟正黑體 48 bold", bg = "#363636", fg = "white")
+    title.place(anchor = "center", x = 512, y = 60)
 
+    # 時間選擇欄
+    timeLabel1 = tk.Label(recordSysWin, text = "時間")
+    timeLabel1.config(font = "微軟正黑體 20 bold", bg = "#363636", fg = "white")
+    timeLabel1.place(anchor = "center", x = 150, y = 125)
 
+    timeBox = ttk.Combobox(recordSysWin, font = "微軟正黑體 16 bold")
+    timeBox["value"] = ("全部", "過去一週", "過去一月", "過去一年")
+    timeBox.config(width = 12, justify = "center")
+    timeBox["state"] = "readonly"
+    timeBox.current(0)
+    timeBox.place(anchor = "center", x = 150, y = 160)
+    
+    # 類別選擇欄
+    classLabel1 = tk.Label(recordSysWin, text = "種類")
+    classLabel1.config(font = "微軟正黑體 20 bold", bg = "#363636", fg = "white")
+    classLabel1.place(anchor = "center", x = 375, y = 125)
+
+    classBox = ttk.Combobox(recordSysWin, font = "微軟正黑體 16 bold")
+    classBox["value"] = ("全部", "貨幣交換", "儲值記錄", "任務記錄")
+    classBox.config(width = 12, justify = "center")
+    classBox["state"] = "readonly"
+    classBox.current(0)
+    classBox.place(anchor = "center", x = 375, y = 160)
+
+    # 依據用戶名/內容關鍵字查詢
+    typeLabel1 = tk.Label(recordSysWin, text = "依據")
+    typeLabel1.config(font = "微軟正黑體 20 bold", bg = "#363636", fg = "white")
+    typeLabel1.place(anchor = "center", x = 600, y = 125)
+
+    typeBox = ttk.Combobox(recordSysWin, font = "微軟正黑體 16 bold")
+    typeBox["value"] = ("用戶名", "內容關鍵字")
+    typeBox.config(width = 12, justify = "center")
+    typeBox["state"] = "readonly"
+    typeBox.current(0)
+    typeBox.place(anchor = "center", x = 600, y = 160)
+
+    # 關鍵字輸入
+    keywordLabel1 = tk.Label(recordSysWin, text = "請輸入字詞")
+    keywordLabel1.config(font = "微軟正黑體 20 bold", bg = "#363636", fg = "white")
+    keywordLabel1.place(anchor = "center", x = 825, y = 125)
+
+    keywordEntry = tk.Entry(recordSysWin)
+    keywordEntryText = tk.StringVar()
+    keywordEntry.config(textvariable = keywordEntryText, bg = "#5C5C5C", fg = "white", )
+    keywordEntry.config(font = "微軟正黑體 16 bold", width = 12, justify = "center")
+    keywordEntry.place(anchor = "center", x = 825, y = 160)
+
+    # 查詢按鍵
+    global searchImg
+    searchBtn = tk.Button(recordSysWin)
+    searchImg = tk.PhotoImage(file = "查詢.png")
+    searchBtn.config(width = 72, height = 32, image = searchImg, relief = "flat")
+    searchBtn.place(anchor = "center", x = 960, y = 160)
 
 # 方便pyinstaller將圖片攜帶
 # picData = open('func1.png', 'wb')
@@ -552,4 +609,19 @@ win.geometry("1024x699+172+0")
 win.resizable(False, False)
 win.config(bg = "#363636")
 login()
+# 下拉欄格式
+text_font = ('微軟正黑體', '16', "bold")
+win.option_add('*TCombobox*Listbox.font', text_font)
+combostyle = ttk.Style()
+combostyle.theme_create('combostyle', parent='alt',
+                        settings={'TCombobox':
+                                    {'configure':
+                                        {
+                                            'foreground': 'white',
+                                            'selectbackground': '#5C5C5C',
+                                            'fieldbackground': '#5C5C5C',
+                                            'background': 'white',
+                                        }}}
+                        )
+combostyle.theme_use('combostyle')
 win.mainloop()
