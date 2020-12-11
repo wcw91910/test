@@ -21,12 +21,14 @@ data = sheet.get_all_records()  # Get a list of all records
   # Insert the list as a row at index 4
 # print(numRows)
 # print(len(numRows))
-mail = sheet.col_values(2)
-print(mail)
-index = mail.index("b09701153@gmail.com") + 1
-print(index)
+# mail = sheet.col_values(2)
+# print(mail)
+# index = mail.index("b09701153@gmail.com") + 1
+# print(index)
 
-userInfo = sheet.row_values(index)
+# userInfo = sheet.row_values(index)
 
-print(userInfo)
+# print(userInfo)
 # sheet.update_cell(userInfo[0], 5, 100)
+name = sheet.col_values(4)
+print(name)

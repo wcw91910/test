@@ -35,13 +35,13 @@ def login():
     title.place(anchor = "n",x=512, y=50)
 
     # 用戶輸入欄
-    global userText
+    global login_userText
     userTitle = tk.Label(loginWin, text = "電郵地址或用戶名稱")
     userTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
     userTitle.place(anchor = "w", x = 300, y = 200)
     user = tk.Entry(loginWin)
-    userText = tk.StringVar()
-    user.config(textvariable = userText, width = 38, font = "arial 14")
+    login_userText = tk.StringVar()
+    user.config(textvariable = login_userText, width = 38, font = "arial 14")
     user.place(anchor = "w", x = 300, y = 230)
 
     global uW
@@ -52,13 +52,13 @@ def login():
     userWarning.place(anchor = "w", x = 300, y = 255)
 
     # 密碼欄
-    global passwordText
+    global login_passwordText
     passwordTitle = tk.Label(loginWin, text = "密碼")
     passwordTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
     passwordTitle.place(anchor = "w", x = 300, y = 280)
     password = tk.Entry(loginWin)
-    passwordText = tk.StringVar()
-    password.config(textvariable = passwordText, width = 38, font = "arial 14", show = "●")
+    login_passwordText = tk.StringVar()
+    password.config(textvariable = login_passwordText, width = 38, font = "arial 14", show = "●")
     password.place(anchor = "w", x = 300, y = 310)
 
     global pW
@@ -107,13 +107,14 @@ def findAccount():
     sheet = client.open("NTU Coin").sheet1  # Open the spreadhseet
     mail = sheet.col_values(2)
     # 檢驗信箱
-    if userText.get() in mail:
-        index = mail.index(userText.get()) + 1
+    if login_userText.get() in mail:
+        index = mail.index(login_userText.get()) + 1
         userInfo = sheet.row_values(index)
         # 接著檢驗密碼
-        if passwordText.get() == userInfo[2]:
+        if login_passwordText.get() == userInfo[2]:
             pW.set("")
             homepage()
+            # print(userInfo)
         else:
             uW.set("")
             pW.set("❕ 密碼錯誤")
@@ -146,10 +147,10 @@ def signUp():
     mailTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
     mailTitle.place(anchor = "w", x = 300, y = 170)
 
-    global mailText
+    global signUp_mailText
     mail = tk.Entry(signUpWin)
-    mailText = tk.StringVar()
-    mail.config(textvariable = mailText, width = 38, font = "arial 14")
+    signUp_mailText = tk.StringVar()
+    mail.config(textvariable = signUp_mailText, width = 38, font = "arial 14")
     mail.place(anchor = "w", x = 300, y = 200)
 
     # 建立密碼
@@ -157,10 +158,10 @@ def signUp():
     passwordTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
     passwordTitle.place(anchor = "w", x = 300, y = 250)
 
-    global passwordText
+    global signUp_passwordText
     password = tk.Entry(signUpWin)
-    passwordText = tk.StringVar()
-    password.config(textvariable = passwordText, width = 38, font = "arial 14", show = "●")
+    signUp_passwordText = tk.StringVar()
+    password.config(textvariable = signUp_passwordText, width = 38, font = "arial 14", show = "●")
     password.place(anchor = "w", x = 300, y = 280)
 
     # 確認密碼
@@ -168,10 +169,10 @@ def signUp():
     confirmTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
     confirmTitle.place(anchor = "w", x = 300, y = 330)
 
-    global confirmText
+    global signUp_confirmText
     confirm = tk.Entry(signUpWin)
-    confirmText = tk.StringVar()
-    confirm.config(textvariable = confirmText, width = 38, font = "arial 14", show = "●")
+    signUp_confirmText = tk.StringVar()
+    confirm.config(textvariable = signUp_confirmText, width = 38, font = "arial 14", show = "●")
     confirm.place(anchor = "w", x = 300, y = 360)
 
     # 用戶名稱
@@ -179,10 +180,10 @@ def signUp():
     userTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
     userTitle.place(anchor = "w", x = 300, y = 410)
 
-    global userText
+    global signUp_userText
     user = tk.Entry(signUpWin)
-    userText = tk.StringVar()
-    user.config(textvariable = userText, width = 38, font = "arial 14")
+    signUp_userText = tk.StringVar()
+    user.config(textvariable = signUp_userText, width = 38, font = "arial 14")
     user.place(anchor = "w", x = 300, y = 440)
 
     # 註冊鍵
@@ -241,12 +242,19 @@ def signUp():
 
 def checkSignUpInfo():
     """檢查輸入的資訊是否符合規則"""
-    mail = mailText.get()
-    password1 = passwordText.get()
-    password2 = confirmText.get()
-    userName = userText.get()
-    state = []  # 最後用來判斷有無錯誤發生
+    scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
+    creds = ServiceAccountCredentials.from_json_keyfile_name("NTU Coin-0555c96087e3.json", scope)
+    client = gspread.authorize(creds)
+    sheet = client.open("NTU Coin").sheet1  # Open the spreadhseet
+    mails = sheet.col_values(2)
+    names = sheet.col_values(4)
+    numRows = len(mails)
 
+    mail = signUp_mailText.get()
+    password1 = signUp_passwordText.get()
+    password2 = signUp_confirmText.get()
+    userName = signUp_userText.get()
+    state = []  # 最後用來判斷有無錯誤發生
     # 印出錯誤信息
     if mail == "":
         mW.set("❕ 此欄不得為空")
@@ -255,8 +263,11 @@ def checkSignUpInfo():
         if len(data) != 1:
             mW.set("❕ 電郵地址不符合格式")
         else:
-            mW.set("")
-            state.append(0)
+            if signUp_mailText.get() in mails:
+                mW.set("❕ 此電郵已被註冊")
+            else:
+                mW.set("")
+                state.append(0)
 
     if password1 == "":
         p1W.set("❕ 此欄不得為空")
@@ -279,9 +290,14 @@ def checkSignUpInfo():
         if len(userName) > 12:
             nW.set("❕ 用戶名稱不符合規範")
         else:
-            nW.set("")
-            state.append(0)
+            if signUp_userText.get() in names:
+                nW.set("❕ 此用戶名已被註冊")
+            else:
+                nW.set("")
+                state.append(0)
     if len(state) == 4: # 若回傳四個0即代表四個欄位都符合規格
+        ls = [str(numRows + 1), signUp_mailText.get(), signUp_passwordText.get(), signUp_userText.get(), "0"]
+        sheet.append_row(ls, table_range="A{}".format(numRows + 1))
         login()
 
 
