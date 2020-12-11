@@ -3,6 +3,9 @@ from tkinter import ttk
 import sys
 import os
 import re
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+from pprint import pprint
 # from func1_png import img as func1
 # from pageBackground_png import img as pageBackground
 # import base64
@@ -32,6 +35,7 @@ def login():
     title.place(anchor = "n",x=512, y=50)
 
     # 用戶輸入欄
+    global userText
     userTitle = tk.Label(loginWin, text = "電郵地址或用戶名稱")
     userTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
     userTitle.place(anchor = "w", x = 300, y = 200)
@@ -40,7 +44,15 @@ def login():
     user.config(textvariable = userText, width = 38, font = "arial 14")
     user.place(anchor = "w", x = 300, y = 230)
 
+    global uW
+    uW = tk.StringVar()
+    uW.set("")
+    userWarning = tk.Label(loginWin, textvariable = uW)
+    userWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
+    userWarning.place(anchor = "w", x = 300, y = 255)
+
     # 密碼欄
+    global passwordText
     passwordTitle = tk.Label(loginWin, text = "密碼")
     passwordTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
     passwordTitle.place(anchor = "w", x = 300, y = 280)
@@ -49,12 +61,19 @@ def login():
     password.config(textvariable = passwordText, width = 38, font = "arial 14", show = "●")
     password.place(anchor = "w", x = 300, y = 310)
 
+    global pW
+    pW = tk.StringVar()
+    pW.set("")
+    passwordWarning = tk.Label(loginWin, textvariable = pW)
+    passwordWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
+    passwordWarning.place(anchor = "w", x = 300, y = 335)
+
     # 登入鍵
     global loginInImg
     loginInImg = tk.PhotoImage(file = "登入鍵.png")
     loginBtn = tk.Button(loginWin)
     loginBtn.config(image = loginInImg, relief = "flat", width = 450, height = 36)
-    loginBtn.config(command = homepage, cursor = "hand2")
+    loginBtn.config(command = findAccount, cursor = "hand2")
     loginBtn.place(anchor = "center", x = 512, y = 370)
 
     # 未註冊帳戶提示
@@ -78,6 +97,29 @@ def login():
     exitBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
     exitBtn.config(command = whetherExit, cursor = "hand2")
     exitBtn.place(anchor = "se",x=1024, y=699)
+
+
+def findAccount():
+    global userInfo
+    scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
+    creds = ServiceAccountCredentials.from_json_keyfile_name("NTU Coin-0555c96087e3.json", scope)
+    client = gspread.authorize(creds)
+    sheet = client.open("NTU Coin").sheet1  # Open the spreadhseet
+    mail = sheet.col_values(2)
+    # 檢驗信箱
+    if userText.get() in mail:
+        index = mail.index(userText.get()) + 1
+        userInfo = sheet.row_values(index)
+        # 接著檢驗密碼
+        if passwordText.get() == userInfo[2]:
+            pW.set("")
+            homepage()
+        else:
+            uW.set("")
+            pW.set("❕ 密碼錯誤")
+    else:
+        uW.set("❕ 您尚未註冊")
+        pW.set("")
 
 
 def signUp():
@@ -569,7 +611,7 @@ def recordSys():
     typeLabel1.place(anchor = "center", x = 600, y = 125)
 
     typeBox = ttk.Combobox(recordSysWin, font = "微軟正黑體 16 bold")
-    typeBox["value"] = ("用戶名", "內容關鍵字")
+    typeBox["value"] = ("-無-", "用戶名", "內容關鍵字")
     typeBox.config(width = 12, justify = "center")
     typeBox["state"] = "readonly"
     typeBox.current(0)
@@ -582,7 +624,7 @@ def recordSys():
 
     keywordEntry = tk.Entry(recordSysWin)
     keywordEntryText = tk.StringVar()
-    keywordEntry.config(textvariable = keywordEntryText, bg = "#5C5C5C", fg = "white", )
+    keywordEntry.config(textvariable = keywordEntryText, bg = "#5C5C5C", fg = "white")
     keywordEntry.config(font = "微軟正黑體 16 bold", width = 12, justify = "center")
     keywordEntry.place(anchor = "center", x = 825, y = 160)
 
@@ -590,7 +632,7 @@ def recordSys():
     global searchImg
     searchBtn = tk.Button(recordSysWin)
     searchImg = tk.PhotoImage(file = "查詢.png")
-    searchBtn.config(width = 72, height = 32, image = searchImg, relief = "flat")
+    searchBtn.config(width = 72, height = 32, image = searchImg, relief = "flat", cursor = "hand2")
     searchBtn.place(anchor = "center", x = 960, y = 160)
 
 # 方便pyinstaller將圖片攜帶
@@ -609,6 +651,7 @@ win.geometry("1024x699+172+0")
 win.resizable(False, False)
 win.config(bg = "#363636")
 login()
+
 # 下拉欄格式
 text_font = ('微軟正黑體', '16', "bold")
 win.option_add('*TCombobox*Listbox.font', text_font)
@@ -620,8 +663,9 @@ combostyle.theme_create('combostyle', parent='alt',
                                             'foreground': 'white',
                                             'selectbackground': '#5C5C5C',
                                             'fieldbackground': '#5C5C5C',
-                                            'background': 'white',
+                                            'background': 'white'
                                         }}}
                         )
 combostyle.theme_use('combostyle')
+
 win.mainloop()

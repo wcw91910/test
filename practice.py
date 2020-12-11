@@ -70,3 +70,5 @@ def checkSignUpInfo():
             state.append(0)
     if len(state) == 4: # 若回傳四個0即代表四個欄位都符合規格
         login()
+
+

@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "ntu-coin",
+  "private_key_id": "0555c96087e379c46c9ecb791771225cdf381fb9",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCxlppjw6s+zLwr\nPk/VliJurjiU58/e6f3yknaW6UdSvvKm3dXblac+qCVFWCEqJIqIivBld3qCr1To\njxOfUs/kF7jqx90hy9F+8jA42FqHkAZiEhcNuQZVEeZx0lz2m2TK9Tx/SwsfNHQo\nWPp5pCfKCfy8Q1pr7QG/vzU9reRyzqrH+cjvz3lCIE34PfV/E3AzL0P7dd1I6JOr\nHpRPoRpQTRGtL1QLuERDSzJp/6bU6otznbdmaJWMjFbv8sCNXTNtqQmZ7mTYeAah\ng9X32jvOhh4pQWzAKLTbueWAfcuvGwGUrH6QgIIfZAA2bjo6jFxmSbCvKK31m26+\nPgFY6WvZAgMBAAECggEAG+U6yjoFr78sPaSzmKrVLMqcI7PIIM1jsRNVon3xUKui\n5RhKjAwVcc+qzxo5V2vXAPzGJ0Id0eJltYQoAmpZMoyRZPvRHgpslYLIlV1S1yGG\nByitS2AJgRpnNvDi3m/pZMIh5yLsE9JC/sV/TtU81M090HrJ/NMFZ8/Ktq4WiPvu\n5MfJHLv16wgFte17YVLBOy6v8xtwdsUhvBVM26qa3Iku6Zg1MOayrW8NNENc+oHx\nVmQPmo1fdV2O4tHEOXrp1DC+chXhMVN/uK9hq55CkrovZPShEiYkxkhnwNy1FUtJ\nOPfrZwDf1sMt65gR+0Wf2hiD1df/FGlyJnfaVXh9yQKBgQD5QjFQ6dGLswptAfag\n8/XopRJHC5mfwa6TLeXOqWSwO4oQ6s2Zk25MQSPwkRg3o2OhLKVPhHK5VrM2J1Fc\n7ffVBlJAg9cmB1r6UCM70rYLYRSp2IHE0V+uMKUOFoGspq/Md9X+VpV5VzaJSVPx\nFw57fzimpXhpKab8EKsD46VL/QKBgQC2ZC6z0TIyK0F6aLopUNwKCYiMvT625uo2\nxRahV+qP06HbDZQaaBP3e6BI3VQssCrfFBf5tCeevnh5RA6k4bO+cKARK16SQU/A\nh3ZAxVDMBlKz1hnQH9gCvbPrPULoiQ/3uHTDBc0SnRs7Zg8kowkFueKme9XSHy+u\nX/yuuBPQDQKBgCpfc0zDAulRvXL8g3WnI2WyMiI7uZjr7wZ8JfX02/YNmRH5KIx0\nAKsb48UwlUJYF0a99ThIVsxlDcAl/PHkTl47Xd4zy25ej7u/xc2Uq3fRwBaDhMP1\np+NPx69WaiL0jyweLxW2mGBxUAcUnR1+AutBnFrQBGE0QHvXRYs6ts3tAoGANsRo\nXahgeT4R4E7YL5XPLNhl/1TIIyW9iIqv2+zJSzzSKjOumCtOa47ct2R2ZSDVDr06\n4ckd6IXrKQatmwcG8RViiyVJtYMVDovej15wf4MajFOq1prpQxFxmB6CG88kU085\nCGKSjJdOWQyxWV/3UpfZngIrV3fz2lmKR3CQynUCgYBBSNUzCXMo94iY/eTtEaZC\nUYNNrzK8TeEzq5ITCacIzwWGMxiJcqKpJ6zAIqx0GM20qnrg7Ndzo+WUUyFHpNZm\nq6K2/Mue1McLf2UjqeWH1Hc1hEDmQjCsK5+4/A2yw7IkSa1FvdDfdTHRzLbXBdov\nDC9GrnPm7djQzyuDv8WjOg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "daniel@ntu-coin.iam.gserviceaccount.com",
+  "client_id": "106462660207420326388",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/daniel%40ntu-coin.iam.gserviceaccount.com"
+}
