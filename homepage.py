@@ -36,7 +36,7 @@ def login():
 
     # 用戶輸入欄
     global login_userText
-    userTitle = tk.Label(loginWin, text = "電郵地址或用戶名稱")
+    userTitle = tk.Label(loginWin, text = "電郵地址")
     userTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
     userTitle.place(anchor = "w", x = 300, y = 200)
     user = tk.Entry(loginWin)
@@ -520,7 +520,7 @@ def valueSys():
 
 
 def valueSys_moneyEntry():
-    """儲值系統"""
+    """儲值系統_輸入金額"""
     # 背景頁建立
     moneyEntryWin = tk.Frame(valueSysWin)
     moneyEntryWin.config(width = 1024, height = 699, bg = "#363636")
@@ -567,6 +567,7 @@ def valueSys_moneyEntry():
 
 
 def valueSys_moneyEntry_check():
+    """確認輸入的數字為正整數"""
     try:
         data = moneyEntryText.get()
         data = eval(data)
@@ -614,35 +615,41 @@ def recordSys():
     classLabel1.config(font = "微軟正黑體 20 bold", bg = "#363636", fg = "white")
     classLabel1.place(anchor = "center", x = 375, y = 125)
 
-    classBox = ttk.Combobox(recordSysWin, font = "微軟正黑體 16 bold")
-    classBox["value"] = ("全部", "貨幣交換", "儲值記錄", "任務記錄")
-    classBox.config(width = 12, justify = "center")
-    classBox["state"] = "readonly"
-    classBox.current(0)
-    classBox.place(anchor = "center", x = 375, y = 160)
+    global recordSys_classBox
+    recordSys_classBox = ttk.Combobox(recordSysWin, font = "微軟正黑體 16 bold")
+    recordSys_classBox["value"] = ("全部", "貨幣交換", "儲值記錄", "任務記錄")
+    recordSys_classBox.config(width = 12, justify = "center")
+    recordSys_classBox["state"] = "readonly"
+    recordSys_classBox.current(0)
+    recordSys_classBox.bind("<<ComboboxSelected>>", recordSys_checkComboboxState)
+    recordSys_classBox.place(anchor = "center", x = 375, y = 160)
 
     # 依據用戶名/內容關鍵字查詢
     typeLabel1 = tk.Label(recordSysWin, text = "依據")
     typeLabel1.config(font = "微軟正黑體 20 bold", bg = "#363636", fg = "white")
     typeLabel1.place(anchor = "center", x = 600, y = 125)
 
-    typeBox = ttk.Combobox(recordSysWin, font = "微軟正黑體 16 bold")
-    typeBox["value"] = ("-無-", "用戶名", "內容關鍵字")
-    typeBox.config(width = 12, justify = "center")
-    typeBox["state"] = "readonly"
-    typeBox.current(0)
-    typeBox.place(anchor = "center", x = 600, y = 160)
+    global recordSys_typeBox
+    recordSys_typeBox = ttk.Combobox(recordSysWin, font = "微軟正黑體 16 bold")
+    recordSys_typeBox["value"] = ("-無-", "用戶名", "內容關鍵字")
+    recordSys_typeBox.config(width = 12, justify = "center")
+    recordSys_typeBox["state"] = "readonly"
+    recordSys_typeBox.current(0)
+    recordSys_typeBox.bind("<<ComboboxSelected>>", recordSys_checkEntryState)
+    recordSys_typeBox.place(anchor = "center", x = 600, y = 160)
 
     # 關鍵字輸入
     keywordLabel1 = tk.Label(recordSysWin, text = "請輸入字詞")
     keywordLabel1.config(font = "微軟正黑體 20 bold", bg = "#363636", fg = "white")
     keywordLabel1.place(anchor = "center", x = 825, y = 125)
 
-    keywordEntry = tk.Entry(recordSysWin)
-    keywordEntryText = tk.StringVar()
-    keywordEntry.config(textvariable = keywordEntryText, bg = "#5C5C5C", fg = "white")
-    keywordEntry.config(font = "微軟正黑體 16 bold", width = 12, justify = "center")
-    keywordEntry.place(anchor = "center", x = 825, y = 160)
+    global recordSys_keywordEntry
+    global recordSys_keywordEntryText
+    recordSys_keywordEntry = tk.Entry(recordSysWin)
+    recordSys_keywordEntryText = tk.StringVar()
+    recordSys_keywordEntry.config(textvariable = recordSys_keywordEntryText, bg = "#5C5C5C", fg = "white")
+    recordSys_keywordEntry.config(font = "微軟正黑體 16 bold", width = 12, justify = "center", state = "disable")
+    recordSys_keywordEntry.place(anchor = "center", x = 825, y = 160)
 
     # 查詢按鍵
     global searchImg
@@ -650,6 +657,32 @@ def recordSys():
     searchImg = tk.PhotoImage(file = "查詢.png")
     searchBtn.config(width = 72, height = 32, image = searchImg, relief = "flat", cursor = "hand2")
     searchBtn.place(anchor = "center", x = 960, y = 160)
+
+
+def recordSys_checkComboboxState(event):
+    """當選擇儲值記錄時disable依據...查詢"""
+    if recordSys_classBox.get() == "儲值記錄":
+        recordSys_typeBox.current(0)
+        recordSys_typeBox["state"] = "disable"
+        recordSys_keywordEntryText.set("")
+        recordSys_keywordEntry.config(state = "disable")
+    else:
+        recordSys_typeBox["state"] = "readonly"
+        if recordSys_typeBox.get() == "-無-":
+            recordSys_keywordEntryText.set("")
+            recordSys_keywordEntry.config(state = "disable")
+        else:
+            recordSys_keywordEntry.config(state = "normal")
+
+
+def recordSys_checkEntryState(event):
+    """當選擇-無-時disable輸入關鍵字的地方"""
+    if recordSys_typeBox.get() == "-無-":
+        recordSys_keywordEntryText.set("")
+        recordSys_keywordEntry.config(state = "disable")
+    else:
+        recordSys_keywordEntry.config(state = "normal")
+
 
 # 方便pyinstaller將圖片攜帶
 # picData = open('func1.png', 'wb')

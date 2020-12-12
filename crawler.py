@@ -1,7 +1,7 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from pprint import pprint
-
+import json
 scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
 
 creds = ServiceAccountCredentials.from_json_keyfile_name("NTU Coin-0555c96087e3.json", scope)
@@ -12,7 +12,14 @@ sheet = client.open("NTU Coin").sheet1  # Open the spreadhseet
 
 data = sheet.get_all_records()  # Get a list of all records
 
-# print(data)
+for i in range(len(data)):
+  print(data[i])
+
+data = json.dumps(data, indent = 2)
+
+print(data)
+ 
+
 # numRows = sheet.col_values(2)
 # newIndex = len(numRows) + 1
 # ls = [str(len(numRows) + 1), "aaa@gmail.com", "12345678", "hihihi", "0"]
@@ -30,5 +37,5 @@ data = sheet.get_all_records()  # Get a list of all records
 
 # print(userInfo)
 # sheet.update_cell(userInfo[0], 5, 100)
-name = sheet.col_values(4)
-print(name)
+# name = sheet.col_values(4)
+# print(name)
