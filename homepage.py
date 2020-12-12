@@ -104,7 +104,7 @@ def findAccount():
     scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
     creds = ServiceAccountCredentials.from_json_keyfile_name("NTU Coin-0555c96087e3.json", scope)
     client = gspread.authorize(creds)
-    sheet = client.open("NTU Coin").sheet1  # Open the spreadhseet
+    sheet = client.open("NTU Coin").get_worksheet(0)  # Open the spreadhseet
     mail = sheet.col_values(2)
     # 檢驗信箱
     if login_userText.get() in mail:
@@ -145,66 +145,77 @@ def signUp():
     # 輸入電子信箱欄
     mailTitle = tk.Label(signUpWin, text = "您的電子郵件地址是什麼？")
     mailTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
-    mailTitle.place(anchor = "w", x = 300, y = 170)
+    mailTitle.place(anchor = "w", x = 300, y = 180)
 
     global signUp_mailText
     mail = tk.Entry(signUpWin)
     signUp_mailText = tk.StringVar()
     mail.config(textvariable = signUp_mailText, width = 38, font = "arial 14")
-    mail.place(anchor = "w", x = 300, y = 200)
+    mail.place(anchor = "w", x = 300, y = 210)
 
     # 建立密碼
     passwordTitle = tk.Label(signUpWin, text = "建立密碼")
     passwordTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
-    passwordTitle.place(anchor = "w", x = 300, y = 250)
+    passwordTitle.place(anchor = "w", x = 300, y = 260)
 
     global signUp_passwordText
     password = tk.Entry(signUpWin)
     signUp_passwordText = tk.StringVar()
     password.config(textvariable = signUp_passwordText, width = 38, font = "arial 14", show = "●")
-    password.place(anchor = "w", x = 300, y = 280)
+    password.place(anchor = "w", x = 300, y = 290)
 
     # 確認密碼
     confirmTitle = tk.Label(signUpWin, text = "確認密碼")
     confirmTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
-    confirmTitle.place(anchor = "w", x = 300, y = 330)
+    confirmTitle.place(anchor = "w", x = 300, y = 340)
 
     global signUp_confirmText
     confirm = tk.Entry(signUpWin)
     signUp_confirmText = tk.StringVar()
     confirm.config(textvariable = signUp_confirmText, width = 38, font = "arial 14", show = "●")
-    confirm.place(anchor = "w", x = 300, y = 360)
+    confirm.place(anchor = "w", x = 300, y = 370)
 
     # 用戶名稱
     userTitle = tk.Label(signUpWin, text = "用戶名稱（12個字元以下）")
     userTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
-    userTitle.place(anchor = "w", x = 300, y = 410)
+    userTitle.place(anchor = "w", x = 300, y = 420)
 
     global signUp_userText
     user = tk.Entry(signUpWin)
     signUp_userText = tk.StringVar()
     user.config(textvariable = signUp_userText, width = 38, font = "arial 14")
-    user.place(anchor = "w", x = 300, y = 440)
+    user.place(anchor = "w", x = 300, y = 450)
 
+    # 交易密碼
+    transactionTitle = tk.Label(signUpWin, text = "8位數字的交易密碼（供之後交易使用）")
+    transactionTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
+    transactionTitle.place(anchor = "w", x = 300, y = 500)
+
+    global signUp_transactionText
+    transaction = tk.Entry(signUpWin)
+    signUp_transactionText = tk.StringVar()
+    transaction.config(textvariable = signUp_transactionText, width = 38, font = "arial 14", show = "●")
+    transaction.place(anchor = "w", x = 300, y = 530)
+    
     # 註冊鍵
     global signUpImg
     signUpImg = tk.PhotoImage(file = "註冊鍵.png")
     loginBtn = tk.Button(signUpWin)
     loginBtn.config(image = signUpImg, relief = "flat", width = 450, height = 36)
     loginBtn.config(command = checkSignUpInfo, cursor = "hand2")
-    loginBtn.place(anchor = "center", x = 512, y = 520)
+    loginBtn.place(anchor = "center", x = 512, y = 590)
 
 
     # 已經有帳戶了？
     haveAnAccountTitle = tk.Label(signUpWin, text = "已經有帳戶了？")
     haveAnAccountTitle.config(font = "微軟正黑體 22 bold", bg = "#363636", fg = "white")
-    haveAnAccountTitle.place(anchor = "center", x = 512, y = 600)
+    haveAnAccountTitle.place(anchor = "center", x = 512, y = 640)
 
     haveAnAccountBtn = tk.Button(signUpWin, text = "登入 > ")
     haveAnAccountBtn.config(font = "微軟正黑體 16 bold underline", bg = "#363636", fg = "#0066CC")
     haveAnAccountBtn.config(relief = "flat", activebackground = "#363636", activeforeground = "white")
     haveAnAccountBtn.config(command = login, cursor = "hand2")
-    haveAnAccountBtn.place(anchor = "center", x = 512, y = 640)
+    haveAnAccountBtn.place(anchor = "center", x = 512, y = 680)
 
     """錯誤信息欄"""
     # 檢查信箱欄
@@ -213,7 +224,7 @@ def signUp():
     mW.set("")
     mailWarning = tk.Label(signUpWin, textvariable = mW)
     mailWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
-    mailWarning.place(anchor = "w", x = 300, y = 225)
+    mailWarning.place(anchor = "w", x = 300, y = 235)
 
     # 檢查密碼欄
     global p1W
@@ -221,7 +232,7 @@ def signUp():
     p1W.set("")
     password1Warning = tk.Label(signUpWin, textvariable = p1W)
     password1Warning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
-    password1Warning.place(anchor = "w", x = 300, y = 305)
+    password1Warning.place(anchor = "w", x = 300, y = 315)
 
     # 檢查密碼確認欄
     global p2W
@@ -229,7 +240,7 @@ def signUp():
     p2W.set("")
     password2Warning = tk.Label(signUpWin, textvariable = p2W)
     password2Warning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
-    password2Warning.place(anchor = "w", x = 300, y = 385)
+    password2Warning.place(anchor = "w", x = 300, y = 395)
     
     # 檢查用戶名稱欄
     global nW
@@ -237,7 +248,15 @@ def signUp():
     nW.set("")
     nameWarning = tk.Label(signUpWin, textvariable = nW)
     nameWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
-    nameWarning.place(anchor = "w", x = 300, y = 465)
+    nameWarning.place(anchor = "w", x = 300, y = 475)
+
+    # 交易密碼名稱欄
+    global tW
+    tW = tk.StringVar()
+    tW.set("")
+    transactionWarning = tk.Label(signUpWin, textvariable = tW)
+    transactionWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
+    transactionWarning.place(anchor = "w", x = 300, y = 555)
 
 
 def checkSignUpInfo():
@@ -245,7 +264,7 @@ def checkSignUpInfo():
     scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
     creds = ServiceAccountCredentials.from_json_keyfile_name("NTU Coin-0555c96087e3.json", scope)
     client = gspread.authorize(creds)
-    sheet = client.open("NTU Coin").sheet1  # Open the spreadhseet
+    sheet = client.open("NTU Coin").get_worksheet(0)  # Open the spreadhseet
     mails = sheet.col_values(2)
     names = sheet.col_values(4)
     numRows = len(mails)
@@ -259,7 +278,7 @@ def checkSignUpInfo():
     if mail == "":
         mW.set("❕ 此欄不得為空")
     else:
-        data = re.findall(r"^[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$", mail)
+        data = re.findall(r"^[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]@ntu.edu.tw", mail)
         if len(data) != 1:
             mW.set("❕ 電郵地址不符合格式")
         else:
@@ -295,8 +314,16 @@ def checkSignUpInfo():
             else:
                 nW.set("")
                 state.append(0)
-    if len(state) == 4: # 若回傳四個0即代表四個欄位都符合規格
-        ls = [str(numRows + 1), signUp_mailText.get(), signUp_passwordText.get(), signUp_userText.get(), "0"]
+    if signUp_transactionText.get() == "":
+        tW.set("❕ 此欄不得為空")
+    else:
+        if len(signUp_transactionText.get()) != 8:
+            tW.set("❕ 交易密碼不符合規範")
+        else:
+            tW.set("")
+            state.append(0)
+    if len(state) == 5: # 若回傳四個0即代表五個欄位都符合規格
+        ls = [str(numRows + 1), signUp_mailText.get(), signUp_passwordText.get(), signUp_userText.get(), "0", signUp_transactionText.get()]
         sheet.append_row(ls, table_range="A{}".format(numRows + 1))
         login()
 

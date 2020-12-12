@@ -8,8 +8,9 @@ creds = ServiceAccountCredentials.from_json_keyfile_name("NTU Coin-0555c96087e3.
 
 client = gspread.authorize(creds)
 
-sheet = client.open("NTU Coin").sheet1  # Open the spreadhseet
+sheet = client.open("NTU Coin").get_worksheet(0)  # Open the spreadhseet
 
+# print(sheet)
 data = sheet.get_all_records()  # Get a list of all records
 
 for i in range(len(data)):
