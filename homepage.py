@@ -685,6 +685,52 @@ def recordSys():
     searchBtn.config(width = 72, height = 32, image = searchImg, relief = "flat", cursor = "hand2")
     searchBtn.place(anchor = "center", x = 960, y = 160)
 
+    # 收入
+    revenueSection = tk.Frame(recordSysWin)
+    revenueSection.config(width = 450, height = 350)
+    revenueSection.place(anchor = "n", x= 256,  y = 270)
+    
+    # x.y軸scrollbar
+    revenueBar1 = tk.Scrollbar(revenueSection)
+    revenueBar1.pack(side = tk.RIGHT, fill = tk.Y)
+    revenueBar2 = tk.Scrollbar(revenueSection, orient = tk.HORIZONTAL)
+    revenueBar2.pack(side = tk.BOTTOM, fill = tk.X)
+
+    # 放入信息
+    listbox = tk.Listbox(revenueSection, xscrollcommand = revenueBar2.set, yscrollcommand = revenueBar1.set)
+    listbox.config(font = "KaiTi 20 bold", width = 25, height =12, bg = "#5C5C5C", fg = "white")
+    listbox.config(selectbackground = "#5C5C5C", activestyle = "none")
+    #先加入header
+    header = ["日期", "用戶名稱", "內容", "金額"]
+    tplt_header = "{0:{4}<3} {1:{4}^6} {2:{4}^8} {3:{4}>4}"
+    listbox.insert(0, tplt_header.format(header[0], header[1], header[2], header[3], chr(12288)))
+    # 再加入用戶記錄
+    ls = [["12/11", "daniel", "吃飯", "$100"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"]]
+    tplt = "{0:<6}{1:^12} {2:{4}^8}{3:>8}"
+    for i, content in enumerate(ls):
+        listbox.insert(i + 1, tplt.format(content[0], content[1], content[2], content[3], chr(12288)))
+    listbox.pack(side = tk.LEFT, fill = tk.BOTH)
+    revenueBar1.config(command = listbox.yview)
+    revenueBar2.config(command = listbox.xview)
+
+
+    # 支出
+    expenseSection = tk.Frame(recordSysWin)
+    expenseSection.config(bg = "white", width = 450, height = 350)
+    expenseSection.place(anchor = "center", x = 768, y = 450)
+
+def crawler_userInfo():
+    scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
+    creds = ServiceAccountCredentials.from_json_keyfile_name("NTU Coin-0555c96087e3.json", scope)
+    client = gspread.authorize(creds)
+    sheet = client.open("NTU Coin").get_worksheet(0)  # Open the spreadhseet
+    data = sheet.get_all_records()
+    ls = []
+    for i in range(2, len(data)):
+        info = sheet.row_values(i)
+        ls.append("    ".join(info))
+    return ls
+
 
 def recordSys_checkComboboxState(event):
     """當選擇儲值記錄時disable依據...查詢"""
