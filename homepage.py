@@ -683,41 +683,56 @@ def recordSys():
     searchBtn = tk.Button(recordSysWin)
     searchImg = tk.PhotoImage(file = "查詢.png")
     searchBtn.config(width = 72, height = 32, image = searchImg, relief = "flat", cursor = "hand2")
+    searchBtn.config(command = recordSys_search)
     searchBtn.place(anchor = "center", x = 960, y = 160)
 
-    # 收入
-    revenueSection = tk.Frame(recordSysWin)
-    revenueSection.config(width = 450, height = 350)
-    revenueSection.place(anchor = "n", x= 256,  y = 270)
-    
-    # x.y軸scrollbar
-    revenueBar1 = tk.Scrollbar(revenueSection)
-    revenueBar1.pack(side = tk.RIGHT, fill = tk.Y)
-    revenueBar2 = tk.Scrollbar(revenueSection, orient = tk.HORIZONTAL)
-    revenueBar2.pack(side = tk.BOTTOM, fill = tk.X)
+    # 收入支出選擇
+    global recordSys_ckbtn_rev
+    global recordSys_ckbtn_exp
+    global recordSys_ckbtn_var
+    recordSys_ckbtn_rev = tk.Radiobutton(recordSysWin)
+    recordSys_ckbtn_var = tk.IntVar()
+    recordSys_ckbtn_rev.config(text = "收入", font = "FangSong 16 bold", fg = "white", bg = "#363636")
+    recordSys_ckbtn_rev.config(variable = recordSys_ckbtn_var, value = 0, state = "disable")
+    recordSys_ckbtn_rev.config(activebackground = "#363636", activeforeground	= "white", selectcolor = "#5C5C5C")
+    recordSys_ckbtn_rev.place(anchor = "e", x = 220, y = 250)
+
+    recordSys_ckbtn_exp = tk.Radiobutton(recordSysWin)
+    recordSys_ckbtn_exp.config(text = "支出", font = "FangSong 16 bold", fg = "white", bg = "#363636")
+    recordSys_ckbtn_exp.config(variable = recordSys_ckbtn_var, value = 1, state = "disable")
+    recordSys_ckbtn_exp.config(activebackground = "#363636", activeforeground	= "white", selectcolor = "#5C5C5C")
+    recordSys_ckbtn_exp.place(anchor = "w", x = 220, y = 250)
+
+    # 內容顯示框
+    global recordSys_revenueSection
+    recordSys_revenueSection = tk.Frame(recordSysWin)
+    recordSys_revenueSection.config(width = 800, height = 350, bg = "#363636")
+    recordSys_revenueSection.place(anchor = "n", x= 512,  y = 270)
+
+    # y軸scrollbar
+    global recordSys_revenueBar1
+    recordSys_revenueBar1 = tk.Scrollbar(recordSys_revenueSection)
+    recordSys_revenueBar1.pack(side = tk.RIGHT, fill = tk.Y)
 
     # 放入信息
-    listbox = tk.Listbox(revenueSection, xscrollcommand = revenueBar2.set, yscrollcommand = revenueBar1.set)
-    listbox.config(font = "KaiTi 20 bold", width = 25, height =12, bg = "#5C5C5C", fg = "white")
-    listbox.config(selectbackground = "#5C5C5C", activestyle = "none")
+    global recordSys_listbox
+    recordSys_listbox = tk.Listbox(recordSys_revenueSection, yscrollcommand = recordSys_revenueBar1.set)
+    recordSys_listbox.config(font = "FangSong 20 bold", width = 48, height =13, bg = "#5C5C5C", fg = "white")
+    recordSys_listbox.config(selectbackground = "#5C5C5C", activestyle = "none")
     #先加入header
     header = ["日期", "用戶名稱", "內容", "金額"]
-    tplt_header = "{0:{4}<3} {1:{4}^6} {2:{4}^8} {3:{4}>4}"
-    listbox.insert(0, tplt_header.format(header[0], header[1], header[2], header[3], chr(12288)))
+    tplt_header = "{0:{4}<3} {1:{4}^6} {2:{4}^10} {3:{4}>4}"
+    recordSys_listbox.insert(0, tplt_header.format(header[0], header[1], header[2], header[3], chr(12288)))
     # 再加入用戶記錄
-    ls = [["12/11", "daniel", "吃飯", "$100"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"]]
-    tplt = "{0:<6}{1:^12} {2:{4}^8}{3:>8}"
-    for i, content in enumerate(ls):
-        listbox.insert(i + 1, tplt.format(content[0], content[1], content[2], content[3], chr(12288)))
-    listbox.pack(side = tk.LEFT, fill = tk.BOTH)
-    revenueBar1.config(command = listbox.yview)
-    revenueBar2.config(command = listbox.xview)
-
-
-    # 支出
-    expenseSection = tk.Frame(recordSysWin)
-    expenseSection.config(bg = "white", width = 450, height = 350)
-    expenseSection.place(anchor = "center", x = 768, y = 450)
+    global recordSys_record_ls
+    # recordSys_record_ls = [["12/11", "daniel", "吃飯", "$1"], ["5/12", "l", "幫", "$100000"], ["12/13", "d", "幫", "$1"], ["12/13", "tallllDaniel", "幫道道道到到到道道道", "$100000"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"]]
+    recordSys_record_ls = [[" ", " ", chr(12288), " "]]*10
+    tplt = "{0:<6}{1:^12} {2:{4}^10}{3:>8}"
+    for i, content in enumerate(recordSys_record_ls):
+        recordSys_listbox.insert(i + 1, tplt.format(content[0], content[1], content[2], content[3], chr(12288)))
+    recordSys_listbox.pack(side = tk.LEFT, fill = tk.BOTH)
+    recordSys_revenueBar1.config(command = recordSys_listbox.yview)
+    
 
 def crawler_userInfo():
     scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
@@ -755,6 +770,18 @@ def recordSys_checkEntryState(event):
         recordSys_keywordEntry.config(state = "disable")
     else:
         recordSys_keywordEntry.config(state = "normal")
+
+
+def recordSys_search():
+    """顯示紀錄"""
+    recordSys_ckbtn_rev.config(state = "normal")
+    recordSys_ckbtn_exp.config(state = "normal")
+    recordSys_ckbtn_var.set(0)
+    recordSys_listbox.delete(1, "end")
+    recordSys_record_ls = [["12/11", "daniel", "吃飯", "$1"], ["5/12", "l", "幫", "$100000"], ["12/13", "d", "幫", "$1"], ["12/13", "tallllDaniel", "幫道道道到到到道道道", "$100000"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"]]
+    tplt = "{0:<6}{1:^12} {2:{4}^10}{3:>8}"
+    for i, content in enumerate(recordSys_record_ls):
+        recordSys_listbox.insert(i + 1, tplt.format(content[0], content[1], content[2], content[3], chr(12288)))
 
 
 # 方便pyinstaller將圖片攜帶
