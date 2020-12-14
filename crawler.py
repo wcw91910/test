@@ -13,12 +13,14 @@ sheet = client.open("NTU Coin").get_worksheet(0)  # Open the spreadhseet
 # print(sheet)
 data = sheet.get_all_records()  # Get a list of all records
 
-for i in range(len(data)):
-  print(data[i])
+num_rows = sheet.col_values(1)
+print(num_rows)
+# for i in range(len(data)):
+#   print(data[i])
 
-data = json.dumps(data, indent = 2)
+# data = json.dumps(data, indent = 2)
 
-print(data)
+# print(data)
  
 
 # numRows = sheet.col_values(2)

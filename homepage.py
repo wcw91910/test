@@ -518,7 +518,7 @@ def exchangeSys():
 
 
 def exchangeSys_normal():
-    """儲值系統"""
+    """一般交換系統"""
     # 背景頁建立
     global exchangeSys_normal_Win
     exchangeSys_normal_Win = tk.Frame(exchangeSysWin)
@@ -605,6 +605,7 @@ def exchangeSys_normal():
 
 
 def exchangeSys_normal_check():
+    """確認輸入資訊正確"""
     scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
     creds = ServiceAccountCredentials.from_json_keyfile_name("NTU Coin-0555c96087e3.json", scope)
     client = gspread.authorize(creds)
@@ -714,6 +715,7 @@ def exchangeSys_whetherExchange():
 
 
 def exchangeSys_runExchange():
+    """執行交換"""
     scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
     creds = ServiceAccountCredentials.from_json_keyfile_name("NTU Coin-0555c96087e3.json", scope)
     client = gspread.authorize(creds)
@@ -775,6 +777,14 @@ def exchangeSys_runExchange():
     exitBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
     exitBtn.config(command = exchangeSysWin.destroy, cursor = "hand2")
     exitBtn.place(anchor = "se",x=1024, y=699)
+
+    """上傳紀錄"""
+    exchange_record_sheet = client.open("NTU Coin").get_worksheet(3)    # 交換記錄表單
+    num_rows = len(exchange_record_sheet.col_values(1))    # 欄位目前長度
+    row1 = [num_rows + 1, 'norm-', userInfo[1], exchange_account, -exchange_amount, user_balance, exchange_time]
+    row2 = [num_rows + 2, 'norm+', exchange_account, userInfo[1], exchange_amount, exchange_balance, exchange_time]
+    insert_rows = [row1, row2]
+    exchange_record_sheet.append_rows(insert_rows)    # 新增紀錄
 
 
 def taskSys():
