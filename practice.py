@@ -224,6 +224,6 @@ sheet = client.open("NTU Coin").get_worksheet(0) # Open the spreadhseet
 data = sheet.get_all_records() # Get a list of all records
 
 
-account = 'b08701153@ntu.edu.tw'    # 使用者帳號(從登入資訊抓來)
+account = 'b09704063@ntu.edu.tw'    # 使用者帳號(從登入資訊抓來)
 ex_system = Exchange_system()
 exchange_homepage(ex_system)

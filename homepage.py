@@ -6,6 +6,7 @@ import re
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from pprint import pprint
+import datetime
 # from func1_png import img as func1
 # from pageBackground_png import img as pageBackground
 # import base64
@@ -649,20 +650,18 @@ def exchangeSys_normal_check():
         else:
             exchangeSys_normal_Win_qW.set("")
             exchange_amount = int(exchange_amount)
-            amount_accepted = True
             
-            # 確保剩餘硬幣足夠
-            if user_balance < exchange_amount:
-                exchangeSys_normal_Win_qW.set('❕ 剩餘硬幣不足')
-                amount_accepted = False
-            else:
-                exchangeSys_normal_Win_qW.set('')
-                amount_accepted = True
-
             # 確保交換數量為正
             if exchange_amount > 0:
                 exchangeSys_normal_Win_qW.set('')
                 amount_accepted = True
+                # 確保剩餘硬幣足夠
+                if user_balance < exchange_amount:
+                    exchangeSys_normal_Win_qW.set('❕ 剩餘硬幣不足')
+                    amount_accepted = False
+                else:
+                    exchangeSys_normal_Win_qW.set('')
+                    amount_accepted = True
             else:
                 exchangeSys_normal_Win_qW.set('❕ 交易數量需為正')
                 amount_accepted = False
@@ -731,12 +730,52 @@ def exchangeSys_runExchange():
     exchange_password = exchangeSys_normal_Win_passwordText.get()    # 交易密碼
     exchange_info = sheet.row_values(exchange_index)    # 交換帳號帳戶資訊
     exchange_balance = int(exchange_info[4])    # 交換帳號餘額
+    exchange_time = datetime.datetime.strftime(datetime.datetime.now(),'%Y-%m-%d %H:%M:%S')  # 交換時間
+
     # 更新資訊
     user_balance -= exchange_amount # 扣掉交易數量
     exchange_balance += exchange_amount # 加上交易數量
     sheet.update_cell(userInfo[0], 5, user_balance)
     sheet.update_cell(exchange_index, 5, exchange_balance)
-    exchangeSysWin.destroy()
+
+    # 製造明細
+    exchangeSys_normal_exchangeDatailWin = tk.Frame(exchangeSys_normal_Win)
+    exchangeSys_normal_exchangeDatailWin.config(width = 1024, height = 699, bg = "#363636")
+    exchangeSys_normal_exchangeDatailWin.place(x = 0, y = 0)
+
+    # 明細標題
+    title = tk.Label(exchangeSys_normal_exchangeDatailWin, text = "交易明細")
+    title.config(font = "微軟正黑體 48 bold", bg = "#363636", fg = "white")
+    title.place(anchor = "center", x = 512, y = 60)
+
+    # 明細內容
+    content = '交換帳號: ' + exchange_account
+    lab_account = tk.Label(exchangeSys_normal_exchangeDatailWin, text = content)   # 交換帳號
+    lab_account.config(bg = "#363636", fg = "white", font = "微軟正黑體 28 bold")
+    lab_account.place(anchor = "w", x = 220, y = 200)
+
+    content = '交換數量: ' + str(exchange_amount)
+    lab_amount = tk.Label(exchangeSys_normal_exchangeDatailWin, text=content)    # 交換數量
+    lab_amount.config(bg = "#363636", fg = "white", font = "微軟正黑體 28 bold")
+    lab_amount.place(anchor = "w", x = 220, y = 300)
+
+    content = '帳戶餘額: ' + str(user_balance)
+    lab_balance = tk.Label(exchangeSys_normal_exchangeDatailWin, text=content)   # 帳戶餘額
+    lab_balance.config(bg = "#363636", fg = "white", font = "微軟正黑體 28 bold")
+    lab_balance.place(anchor = "w", x = 220, y = 400)
+
+    content = '交換時間: ' + exchange_time
+    lab_time = tk.Label(exchangeSys_normal_exchangeDatailWin, text=content)      # 交換數量
+    lab_time.config(bg = "#363636", fg = "white", font = "微軟正黑體 28 bold")
+    lab_time.place(anchor = "w", x = 220, y = 500)
+
+    # 離開鍵
+    exitBtn = tk.Button(exchangeSys_normal_exchangeDatailWin, text = "回到首頁\nHome")
+    exitBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+    exitBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+    exitBtn.config(command = exchangeSysWin.destroy, cursor = "hand2")
+    exitBtn.place(anchor = "se",x=1024, y=699)
+
 
 def taskSys():
     """任務系統"""
