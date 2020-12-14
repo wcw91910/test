@@ -482,6 +482,7 @@ def helpPage():
 def exchangeSys():
     """貨幣交換系統"""
     # 背景頁建立
+    global exchangeSysWin
     exchangeSysWin = tk.Frame(homeWin)
     exchangeSysWin.config(width = 1024, height = 699, bg = "#363636")
     exchangeSysWin.place(x = 0, y = 0)
@@ -493,6 +494,249 @@ def exchangeSys():
     backBtn.config(command = exchangeSysWin.destroy, cursor = "hand2")
     backBtn.place(anchor = "se",x=1024, y=699)
 
+    # 標題
+    title = tk.Label(exchangeSysWin, text = "貨幣交換系統")
+    title.config(font = "微軟正黑體 48 bold", bg = "#363636", fg = "white")
+    title.place(anchor = "center", x = 512, y = 60)
+
+    # 一般交換
+    global Img_taskSys_exchange_normal
+    Img_taskSys_exchange_normal = tk.PhotoImage(file = "一般交換.png")
+    exchange_normal_Btn = tk.Button(exchangeSysWin)
+    exchange_normal_Btn.config(image = Img_taskSys_exchange_normal, width = 790, height = 140)
+    exchange_normal_Btn.config(relief = "flat", cursor = "hand2", command = exchangeSys_normal)
+    exchange_normal_Btn.place(anchor = "center", x = 512, y = 250)
+
+    # 特殊交換
+    global Img_taskSys_exchange_special
+    Img_taskSys_exchange_special = tk.PhotoImage(file = "特殊交換.png")
+    exchange_special_Btn = tk.Button(exchangeSysWin)
+    exchange_special_Btn.config(image = Img_taskSys_exchange_special, width = 790, height = 140)
+    exchange_special_Btn.config(relief = "flat", cursor = "hand2")
+    exchange_special_Btn.place(anchor = "center", x = 512, y = 440)
+
+
+def exchangeSys_normal():
+    """儲值系統"""
+    # 背景頁建立
+    global exchangeSys_normal_Win
+    exchangeSys_normal_Win = tk.Frame(exchangeSysWin)
+    exchangeSys_normal_Win.config(width = 1024, height = 699, bg = "#363636")
+    exchangeSys_normal_Win.place(x = 0, y = 0)
+
+    # 返回鍵建立
+    backBtn = tk.Button(exchangeSys_normal_Win, text = "回到上頁\nBack")
+    backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+    backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+    backBtn.config(command = exchangeSys_normal_Win.destroy, cursor = "hand2")
+    backBtn.place(anchor = "se",x=1024, y=699)
+
+    # 標題
+    title = tk.Label(exchangeSys_normal_Win, text = "一般交換系統")
+    title.config(font = "微軟正黑體 48 bold", bg = "#363636", fg = "white")
+    title.place(anchor = "center", x = 512, y = 60)
+
+    # 交換帳號欄
+    mailTitle = tk.Label(exchangeSys_normal_Win, text = "交易帳號")
+    mailTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
+    mailTitle.place(anchor = "w", x = 300, y = 180)
+
+    global exchangeSys_normal_Win_mailText
+    mail = tk.Entry(exchangeSys_normal_Win)
+    exchangeSys_normal_Win_mailText = tk.StringVar()
+    mail.config(textvariable = exchangeSys_normal_Win_mailText, width = 38, font = "arial 14")
+    mail.place(anchor = "w", x = 300, y = 210)
+
+    # 交換數量欄
+    quantityTitle = tk.Label(exchangeSys_normal_Win, text = "交易數量")
+    quantityTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
+    quantityTitle.place(anchor = "w", x = 300, y = 260)
+
+    global exchangeSys_normal_Win_quantityText
+    quantity = tk.Entry(exchangeSys_normal_Win)
+    exchangeSys_normal_Win_quantityText = tk.StringVar()
+    quantity.config(textvariable = exchangeSys_normal_Win_quantityText, width = 38, font = "arial 14")
+    quantity.place(anchor = "w", x = 300, y = 290)
+
+    # 交易密碼欄
+    passwordTitle = tk.Label(exchangeSys_normal_Win, text = "交易密碼")
+    passwordTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
+    passwordTitle.place(anchor = "w", x = 300, y = 340)
+
+    global exchangeSys_normal_Win_passwordText
+    password = tk.Entry(exchangeSys_normal_Win)
+    exchangeSys_normal_Win_passwordText = tk.StringVar()
+    password.config(textvariable = exchangeSys_normal_Win_passwordText, width = 38, font = "arial 14", show = "●")
+    password.place(anchor = "w", x = 300, y = 370)
+
+    # 確認鍵
+    global exchangeSys_normal_Win_sureImg
+    exchangeSys_normal_Win_sureImg = tk.PhotoImage(file = "確認.png")
+    exchangeSys_normal_Win_sureBtn = tk.Button(exchangeSys_normal_Win)
+    exchangeSys_normal_Win_sureBtn.config(image = exchangeSys_normal_Win_sureImg, relief = "flat", width = 450, height = 36)
+    exchangeSys_normal_Win_sureBtn.config(command = exchangeSys_normal_check, cursor = "hand2")
+    exchangeSys_normal_Win_sureBtn.place(anchor = "center", x = 512, y = 460)
+
+    """建立錯誤信息"""
+    # 檢查信箱欄
+    global exchangeSys_normal_Win_mW
+    exchangeSys_normal_Win_mW = tk.StringVar()
+    exchangeSys_normal_Win_mW.set("")
+    exchangeSys_normal_Win_mailWarning = tk.Label(exchangeSys_normal_Win, textvariable = exchangeSys_normal_Win_mW)
+    exchangeSys_normal_Win_mailWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
+    exchangeSys_normal_Win_mailWarning.place(anchor = "w", x = 300, y = 235)
+
+    # 檢查數量欄
+    global exchangeSys_normal_Win_qW
+    exchangeSys_normal_Win_qW = tk.StringVar()
+    exchangeSys_normal_Win_qW.set("")
+    exchangeSys_normal_Win_quantityWarning = tk.Label(exchangeSys_normal_Win, textvariable = exchangeSys_normal_Win_qW)
+    exchangeSys_normal_Win_quantityWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
+    exchangeSys_normal_Win_quantityWarning.place(anchor = "w", x = 300, y = 315)
+
+    # 檢查密碼確認欄
+    global exchangeSys_normal_Win_pW
+    exchangeSys_normal_Win_pW = tk.StringVar()
+    exchangeSys_normal_Win_pW.set("")
+    exchangeSys_normal_Win_passwordWarning = tk.Label(exchangeSys_normal_Win, textvariable = exchangeSys_normal_Win_pW)
+    exchangeSys_normal_Win_passwordWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
+    exchangeSys_normal_Win_passwordWarning.place(anchor = "w", x = 300, y = 395)
+
+
+def exchangeSys_normal_check():
+    scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
+    creds = ServiceAccountCredentials.from_json_keyfile_name("NTU Coin-0555c96087e3.json", scope)
+    client = gspread.authorize(creds)
+    sheet = client.open("NTU Coin").get_worksheet(0)  # Open the spreadhseet
+
+    # 抓取使用者帳戶資訊
+    user_account_all = sheet.col_values(2)            # 大家的帳號(Email)
+    user_index = user_account_all.index(userInfo[1]) + 1    # 索引值
+    user_info = sheet.row_values(user_index)            # 使用者帳戶資訊
+    user_balance = int(user_info[4])    # 帳戶餘額
+
+    # 檢查輸入內容
+    exchange_account = exchangeSys_normal_Win_mailText.get()    # 交換的帳號
+
+    # 確保交換帳號存在
+    if exchange_account == "":
+        exchangeSys_normal_Win_mW.set("❕ 此欄不得為空")
+        account_accept = False
+    else:
+        if exchange_account == userInfo[1]:
+            exchangeSys_normal_Win_mW.set("❕ 不得和自己交換")
+            account_accept = False
+        else:
+            if exchange_account in user_account_all:
+                exchangeSys_normal_Win_mW.set("")
+                exchange_index = user_account_all.index(exchange_account) + 1    # 交換帳號的索引值
+                account_accept = True
+            else:
+                exchangeSys_normal_Win_mW.set('❕ 帳號不存在')
+                account_accept = False
+    
+    exchange_amount = exchangeSys_normal_Win_quantityText.get()      # 交換數量
+    # 確保交換數量為數字
+    if exchange_amount == "":
+        exchangeSys_normal_Win_qW.set("❕ 此欄不得為空")
+        amount_accepted = False
+    else:
+        try:
+            int(exchange_amount)
+        except:
+            exchangeSys_normal_Win_qW.set("❕ 請輸入正整數")
+            amount_accepted = False
+        else:
+            exchangeSys_normal_Win_qW.set("")
+            exchange_amount = int(exchange_amount)
+            amount_accepted = True
+            
+            # 確保剩餘硬幣足夠
+            if user_balance < exchange_amount:
+                exchangeSys_normal_Win_qW.set('❕ 剩餘硬幣不足')
+                amount_accepted = False
+            else:
+                exchangeSys_normal_Win_qW.set('')
+                amount_accepted = True
+
+            # 確保交換數量為正
+            if exchange_amount > 0:
+                exchangeSys_normal_Win_qW.set('')
+                amount_accepted = True
+            else:
+                exchangeSys_normal_Win_qW.set('❕ 交易數量需為正')
+                amount_accepted = False
+
+    exchange_password = exchangeSys_normal_Win_passwordText.get()    # 交易密碼
+    # 確保密碼正確
+    if exchange_password == str(user_info[5]):
+        exchangeSys_normal_Win_pW.set("")
+        password_accepted = True
+    else:
+        if exchange_password == "":
+            exchangeSys_normal_Win_pW.set("❕ 此欄不得為空")
+            password_accepted = False
+        else:
+            exchangeSys_normal_Win_pW.set("❕ 交易密碼錯誤")
+            password_accepted = False
+
+    # 輸入內容檢查通過
+    if account_accept and amount_accepted and password_accepted:
+        exchangeSys_whetherExchange()
+
+
+def exchangeSys_whetherExchange():
+    """確認使用者是否要交易"""
+    global exchangeSys_whetherExchangeWin
+    exchangeSys_whetherExchangeWin = tk.Frame(exchangeSys_normal_Win)
+    exchangeSys_whetherExchangeWin.config(width = 600, height = 300, bg = "#99B2DD")
+    exchangeSys_whetherExchangeWin.place(anchor = "center", x = 512, y = 350)
+
+    exchangeSys_whetherExchangeText = tk.Label(exchangeSys_whetherExchangeWin)
+    exchangeSys_whetherExchangeText.config(text = "您確定要交換嗎？\n", font = "微軟正黑體 38 bold", bg = "#99B2DD")
+    exchangeSys_whetherExchangeText.config(width = 16, height = 8)
+    exchangeSys_whetherExchangeText.place(anchor = "center", x= 300, y = 120)
+
+    # YES鍵
+    yesBtn = tk.Button(exchangeSys_whetherExchangeWin, text = "YES")
+    yesBtn.config(font = "微軟正黑體 30 bold", bg = "#F3BB91", fg = "red", activebackground = "yellow")
+    yesBtn.config(relief = "flat")
+    yesBtn.config(command = exchangeSys_runExchange, cursor = "hand2")
+    yesBtn.place(anchor = "center", x = 200, y = 200)
+    
+    # NO鍵
+    noBtn = tk.Button(exchangeSys_whetherExchangeWin, text = "NO")
+    noBtn.config(font = "微軟正黑體 30 bold", bg = "#F3BB91", fg = "blue", activebackground = "yellow")
+    noBtn.config(relief = "flat")
+    noBtn.config(command = exchangeSys_whetherExchangeWin.destroy, cursor = "hand2")
+    noBtn.place(anchor = "center", x = 390, y = 200)
+
+    exchangeSys_whetherExchangeWin.place(anchor = "center", x = 512, y = 345)
+
+
+def exchangeSys_runExchange():
+    scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
+    creds = ServiceAccountCredentials.from_json_keyfile_name("NTU Coin-0555c96087e3.json", scope)
+    client = gspread.authorize(creds)
+    sheet = client.open("NTU Coin").get_worksheet(0)  # Open the spreadhseet
+
+    # 抓取使用者帳戶資訊
+    user_account_all = sheet.col_values(2)            # 大家的帳號(Email)
+    user_index = user_account_all.index(userInfo[1]) + 1    # 索引值
+    user_info = sheet.row_values(user_index)            # 使用者帳戶資訊
+    user_balance = int(user_info[4])    # 帳戶餘額
+    exchange_account = exchangeSys_normal_Win_mailText.get()    # 交換的帳號
+    exchange_index = user_account_all.index(exchange_account) + 1   # 交換帳號index
+    exchange_amount = int(exchangeSys_normal_Win_quantityText.get())      # 交換數量
+    exchange_password = exchangeSys_normal_Win_passwordText.get()    # 交易密碼
+    exchange_info = sheet.row_values(exchange_index)    # 交換帳號帳戶資訊
+    exchange_balance = int(exchange_info[4])    # 交換帳號餘額
+    # 更新資訊
+    user_balance -= exchange_amount # 扣掉交易數量
+    exchange_balance += exchange_amount # 加上交易數量
+    sheet.update_cell(userInfo[0], 5, user_balance)
+    sheet.update_cell(exchange_index, 5, exchange_balance)
+    exchangeSysWin.destroy()
 
 def taskSys():
     """任務系統"""
