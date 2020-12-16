@@ -501,18 +501,18 @@ def exchangeSys():
     title.place(anchor = "center", x = 512, y = 60)
 
     # 一般交換
-    global Img_taskSys_exchange_normal
-    Img_taskSys_exchange_normal = tk.PhotoImage(file = "一般交換.png")
+    global Img_exchangeSys_exchange_normal
+    Img_exchangeSys_exchange_normal = tk.PhotoImage(file = "一般交換.png")
     exchange_normal_Btn = tk.Button(exchangeSysWin)
-    exchange_normal_Btn.config(image = Img_taskSys_exchange_normal, width = 790, height = 140)
+    exchange_normal_Btn.config(image = Img_exchangeSys_exchange_normal, width = 790, height = 140)
     exchange_normal_Btn.config(relief = "flat", cursor = "hand2", command = exchangeSys_normal)
     exchange_normal_Btn.place(anchor = "center", x = 512, y = 250)
 
     # 特殊交換
-    global Img_taskSys_exchange_special
-    Img_taskSys_exchange_special = tk.PhotoImage(file = "特殊交換.png")
+    global Img_exchangeSys_exchange_special
+    Img_exchangeSys_exchange_special = tk.PhotoImage(file = "特殊交換.png")
     exchange_special_Btn = tk.Button(exchangeSysWin)
-    exchange_special_Btn.config(image = Img_taskSys_exchange_special, width = 790, height = 140)
+    exchange_special_Btn.config(image = Img_exchangeSys_exchange_special, width = 790, height = 140)
     exchange_special_Btn.config(relief = "flat", cursor = "hand2")
     exchange_special_Btn.place(anchor = "center", x = 512, y = 440)
 
@@ -779,7 +779,7 @@ def exchangeSys_runExchange():
     exitBtn.place(anchor = "se",x=1024, y=699)
 
     """上傳紀錄"""
-    exchange_record_sheet = client.open("NTU Coin").get_worksheet(3)    # 交換記錄表單
+    exchange_record_sheet = client.open("NTU Coin").get_worksheet(2)    # 交換記錄表單
     num_rows = len(exchange_record_sheet.col_values(1))    # 欄位目前長度
     row1 = [num_rows + 1, 'norm-', userInfo[1], exchange_account, -exchange_amount, user_balance, exchange_time]
     row2 = [num_rows + 2, 'norm+', exchange_account, userInfo[1], exchange_amount, exchange_balance, exchange_time]
@@ -790,6 +790,7 @@ def exchangeSys_runExchange():
 def taskSys():
     """任務系統"""
     # 說明頁建立
+    global taskSysWin
     taskSysWin = tk.Frame(homeWin)
     taskSysWin.config(width = 1024, height = 699, bg = "#363636")
     taskSysWin.place(x = 0, y = 0)
@@ -800,6 +801,88 @@ def taskSys():
     backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
     backBtn.config(command = taskSysWin.destroy, cursor = "hand2")
     backBtn.place(anchor = "se",x=1024, y=699)
+
+    # 標題
+    title = tk.Label(taskSysWin, text = "任務系統")
+    title.config(font = "微軟正黑體 48 bold", bg = "#363636", fg = "white")
+    title.place(anchor = "center", x = 512, y = 60)
+
+    # 發佈任務
+    global Img_taskSys_releaseTask
+    Img_taskSys_releaseTask = tk.PhotoImage(file = "發佈任務.png")
+    releaseTask_Btn = tk.Button(taskSysWin)
+    releaseTask_Btn.config(image = Img_taskSys_releaseTask, width = 790, height = 140)
+    releaseTask_Btn.config(relief = "flat", cursor = "hand2", command = taskSys_releaseTask)
+    releaseTask_Btn.place(anchor = "center", x = 512, y = 250)
+
+    # 應徵任務
+    global Img_taskSys_applyTask
+    Img_taskSys_applyTask = tk.PhotoImage(file = "應徵任務.png")
+    applyTask_Btn = tk.Button(taskSysWin)
+    applyTask_Btn.config(image = Img_taskSys_applyTask, width = 790, height = 140)
+    applyTask_Btn.config(relief = "flat", cursor = "hand2")
+    applyTask_Btn.place(anchor = "center", x = 512, y = 440)
+
+
+def taskSys_releaseTask():
+    """應徵任務介面"""
+    # 說明頁建立
+    taskSys_releaseTask_Win = tk.Frame(taskSysWin)
+    taskSys_releaseTask_Win.config(width = 1024, height = 699, bg = "#363636")
+    taskSys_releaseTask_Win.place(x = 0, y = 0)
+
+    # 返回鍵建立
+    backBtn = tk.Button(taskSys_releaseTask_Win, text = "回到上頁\nBack")
+    backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+    backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+    backBtn.config(command = taskSys_releaseTask_Win.destroy, cursor = "hand2")
+    backBtn.place(anchor = "se",x=1024, y=699)
+
+    # 標題
+    title = tk.Label(taskSys_releaseTask_Win, text = "發佈任務")
+    title.config(font = "微軟正黑體 48 bold", bg = "#363636", fg = "white")
+    title.place(anchor = "center", x = 512, y = 60)
+
+    # 任務名稱
+    taskTitle = tk.Label(taskSys_releaseTask_Win, text = "任務名稱（限10個中文字內）")
+    taskTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
+    taskTitle.place(anchor = "w", x = 300, y = 180)
+
+    global taskSys_releaseTask_Win_nameText
+    name = tk.Entry(taskSys_releaseTask_Win)
+    taskSys_releaseTask_Win_nameText = tk.StringVar()
+    name.config(textvariable = taskSys_releaseTask_Win_nameText, width = 38, font = "arial 14")
+    name.place(anchor = "w", x = 300, y = 210)
+
+    # 任務內容
+    contentTitle = tk.Label(taskSys_releaseTask_Win, text = "任務內容")
+    contentTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
+    contentTitle.place(anchor = "w", x = 300, y = 260)
+
+    global taskSys_releaseTask_Win_contentText
+    content = tk.Entry(taskSys_releaseTask_Win)
+    taskSys_releaseTask_Win_contentText = tk.StringVar()
+    content.config(textvariable = taskSys_releaseTask_Win_contentText, width = 38, font = "arial 14")
+    content.place(anchor = "w", x = 300, y = 290)
+
+    # 任務報酬
+    paymentTitle = tk.Label(taskSys_releaseTask_Win, text = "任務報酬")
+    paymentTitle.config(font = "微軟正黑體 14 bold", bg = "#363636",  fg= "white")
+    paymentTitle.place(anchor = "w", x = 300, y = 340)
+
+    global taskSys_releaseTask_Win_paymentText
+    payment = tk.Entry(taskSys_releaseTask_Win)
+    taskSys_releaseTask_Win_paymentText = tk.StringVar()
+    payment.config(textvariable = taskSys_releaseTask_Win_paymentText, width = 38, font = "arial 14")
+    payment.place(anchor = "w", x = 300, y = 370)
+
+    # 確認鍵
+    global taskSys_releaseTask_Win_submitImg
+    taskSys_releaseTask_Win_submitImg = tk.PhotoImage(file = "確認.png")
+    taskSys_releaseTask_Win_sureBtn = tk.Button(taskSys_releaseTask_Win)
+    taskSys_releaseTask_Win_sureBtn.config(image = taskSys_releaseTask_Win_submitImg, relief = "flat", width = 450, height = 36)
+    taskSys_releaseTask_Win_sureBtn.config(cursor = "hand2")
+    taskSys_releaseTask_Win_sureBtn.place(anchor = "center", x = 512, y = 460)
 
 
 def valueSys():
