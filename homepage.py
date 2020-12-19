@@ -177,7 +177,7 @@ def signUp():
     confirm.place(anchor = "w", x = 300, y = 370)
 
     # 用戶名稱
-    userTitle = tk.Label(signUpWin, text = "用戶名稱（12個字元以下）")
+    userTitle = tk.Label(signUpWin, text = "用戶名稱（12個字元以下，限英文和數字）")
     userTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
     userTitle.place(anchor = "w", x = 300, y = 420)
 
@@ -313,8 +313,18 @@ def checkSignUpInfo():
             if signUp_userText.get() in names:
                 nW.set("❕ 此用戶名已被註冊")
             else:
-                nW.set("")
-                state.append(0)
+                status = True
+                for i in range(len(userName)):
+                    if "a" <= userName[i] <= "z" or "A" <= userName[i] <= "Z" or "0" <= userName[i] <= "9":
+                        pass
+                    else:
+                        nW.set("❕ 用戶名稱不符合規範")
+                        status = False
+                        break
+                if status == True:
+                    nW.set("")
+                    state.append(0)
+
     if signUp_transactionText.get() == "":
         tW.set("❕ 此欄不得為空")
     else:
@@ -789,7 +799,7 @@ def exchangeSys_runExchange():
 
 def taskSys():
     """任務系統"""
-    # 說明頁建立
+    # 背景頁建立
     global taskSysWin
     taskSysWin = tk.Frame(homeWin)
     taskSysWin.config(width = 1024, height = 699, bg = "#363636")
@@ -820,13 +830,13 @@ def taskSys():
     Img_taskSys_applyTask = tk.PhotoImage(file = "應徵任務.png")
     applyTask_Btn = tk.Button(taskSysWin)
     applyTask_Btn.config(image = Img_taskSys_applyTask, width = 790, height = 140)
-    applyTask_Btn.config(relief = "flat", cursor = "hand2")
+    applyTask_Btn.config(relief = "flat", cursor = "hand2", command = taskSys_searchTask)
     applyTask_Btn.place(anchor = "center", x = 512, y = 440)
 
 
 def taskSys_releaseTask():
-    """應徵任務介面"""
-    # 說明頁建立
+    """發布任務介面"""
+    # 背景頁建立
     taskSys_releaseTask_Win = tk.Frame(taskSysWin)
     taskSys_releaseTask_Win.config(width = 1024, height = 699, bg = "#363636")
     taskSys_releaseTask_Win.place(x = 0, y = 0)
@@ -883,6 +893,93 @@ def taskSys_releaseTask():
     taskSys_releaseTask_Win_sureBtn.config(image = taskSys_releaseTask_Win_submitImg, relief = "flat", width = 450, height = 36)
     taskSys_releaseTask_Win_sureBtn.config(cursor = "hand2")
     taskSys_releaseTask_Win_sureBtn.place(anchor = "center", x = 512, y = 460)
+
+
+def taskSys_searchTask():
+    """應徵任務介面"""
+    # 背景頁建立
+    global taskSys_searchTask_Win
+    taskSys_searchTask_Win = tk.Frame(taskSysWin)
+    taskSys_searchTask_Win.config(width = 1024, height = 699, bg = "#363636")
+    taskSys_searchTask_Win.place(x = 0, y = 0)
+
+    # 返回鍵建立
+    backBtn = tk.Button(taskSys_searchTask_Win, text = "回到上頁\nBack")
+    backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+    backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+    backBtn.config(command = taskSys_searchTask_Win.destroy, cursor = "hand2")
+    backBtn.place(anchor = "se",x=1024, y=699)
+
+    # 標題
+    title = tk.Label(taskSys_searchTask_Win, text = "應徵任務")
+    title.config(font = "微軟正黑體 48 bold", bg = "#363636", fg = "white")
+    title.place(anchor = "center", x = 512, y = 60)
+
+    # 任務總覽
+    global Img_taskSys_searchTask_overview
+    Img_taskSys_searchTask_overview = tk.PhotoImage(file = "任務總覽.png")
+    overview_Btn = tk.Button(taskSys_searchTask_Win)
+    overview_Btn.config(image = Img_taskSys_searchTask_overview, width = 790, height = 140)
+    overview_Btn.config(relief = "flat", cursor = "hand2", command = taskSys_searchTask_taskOverview)
+    overview_Btn.place(anchor = "center", x = 512, y = 250)
+
+    # 查看現有任務
+    global Img_taskSys_searchTask_currentTasks
+    Img_taskSys_searchTask_currentTasks = tk.PhotoImage(file = "查看現有任務.png")
+    currentTasks_Btn = tk.Button(taskSys_searchTask_Win)
+    currentTasks_Btn.config(image = Img_taskSys_searchTask_currentTasks, width = 790, height = 140)
+    currentTasks_Btn.config(relief = "flat", cursor = "hand2")
+    currentTasks_Btn.place(anchor = "center", x = 512, y = 440)
+
+
+def taskSys_searchTask_taskOverview():
+    """任務總覽介面"""
+    # 背景頁建立
+    taskSys_searchTask_taskOverview_Win = tk.Frame(taskSys_searchTask_Win)
+    taskSys_searchTask_taskOverview_Win.config(width = 1024, height = 699, bg = "#363636")
+    taskSys_searchTask_taskOverview_Win.place(x = 0, y = 0)
+
+    # 返回鍵建立
+    backBtn = tk.Button(taskSys_searchTask_taskOverview_Win, text = "回到上頁\nBack")
+    backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+    backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+    backBtn.config(command = taskSys_searchTask_taskOverview_Win.destroy, cursor = "hand2")
+    backBtn.place(anchor = "se",x=1024, y=699)
+
+    # 標題
+    title = tk.Label(taskSys_searchTask_taskOverview_Win, text = "任務總覽")
+    title.config(font = "微軟正黑體 48 bold", bg = "#363636", fg = "white")
+    title.place(anchor = "center", x = 512, y = 60)
+
+    # 內容顯示框
+    global taskSys_searchTask_taskOverviewSection
+    taskSys_searchTask_taskOverviewSection = tk.Frame(taskSys_searchTask_taskOverview_Win)
+    taskSys_searchTask_taskOverviewSection.config(width = 800, height = 350, bg = "#363636")
+    taskSys_searchTask_taskOverviewSection.place(anchor = "n", x= 512,  y = 130)
+    # y軸scrollbar
+    global taskOverview_Bar
+    taskOverview_Bar = tk.Scrollbar(taskSys_searchTask_taskOverviewSection)
+    taskOverview_Bar.pack(side = tk.RIGHT, fill = tk.Y)
+    # 放入信息
+    global taskOverview_listbox
+    taskOverview_listbox = tk.Listbox(taskSys_searchTask_taskOverviewSection, yscrollcommand = taskOverview_Bar.set)
+    taskOverview_listbox.config(font = "FangSong 20 bold", width = 48, height =18, bg = "#5C5C5C", fg = "white")
+    taskOverview_listbox.config(activestyle = "none")
+    #先加入header
+    header = tk.Label(taskSys_searchTask_taskOverview_Win)
+    tplt_header = "{0:<8}      {1:{3}^10}    {2:>10}"
+    header.config(text = tplt_header.format("No.", "任務名稱","$", chr(12288)), bg = "#363636")
+    header.config(font = "FangSong 20 bold", fg = "white")
+    header.place(anchor = "n", x = 502, y = 95)
+    # 再加入用戶記錄
+    global taskSys_searchTask_taskOverview_ls
+    # taskSys_searchTask_taskOverview_ls = [["12/11", "daniel", "吃飯", "$1"], ["5/12", "l", "幫", "$100000"], ["12/13", "d", "幫", "$1"], ["12/13", "tallllDaniel", "幫道道道到到到道道道", "$100000"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"]]
+    taskSys_searchTask_taskOverview_ls = [["1", "跑腿", "20"], ["2", "幫搶課", "100"], ["3", "徵求高鐵票", "500"], ["4", "徵求水源單人房", "10000"], ["5", "徵求人陪吃飯嗚嗚嗚", "200"], ["6", "托福家教", "10000"], ["7", "醬油膏", "1"], ["8", "睡", "500"], ["9", "徵求人類幫忙簽到民概", "200"]]
+    tplt = "{0:<8}      {1:{3}^10}    {2:>10}"
+    for i, content in enumerate(taskSys_searchTask_taskOverview_ls):
+        taskOverview_listbox.insert(i + 1, tplt.format(content[0], content[1], content[2], chr(12288)))
+    taskOverview_listbox.pack(side = tk.LEFT, fill = tk.BOTH)
+    taskOverview_Bar.config(command = taskOverview_listbox.yview)
 
 
 def valueSys():
