@@ -928,7 +928,7 @@ def taskSys_searchTask():
     Img_taskSys_searchTask_currentTasks = tk.PhotoImage(file = "查看現有任務.png")
     currentTasks_Btn = tk.Button(taskSys_searchTask_Win)
     currentTasks_Btn.config(image = Img_taskSys_searchTask_currentTasks, width = 790, height = 140)
-    currentTasks_Btn.config(relief = "flat", cursor = "hand2")
+    currentTasks_Btn.config(relief = "flat", cursor = "hand2", command = taskSys_searchTask_taskOngoing)
     currentTasks_Btn.place(anchor = "center", x = 512, y = 440)
 
 
@@ -986,7 +986,7 @@ def taskSys_searchTask_taskOverview():
     taskOverview_Bar.config(command = taskOverview_listbox.yview)
 
     # 查看任務詳細資訊
-    taskOverview_listbox.bind('<Double-Button-1>', taskSys_showTaskDetails)
+    taskOverview_listbox.bind('<Double-Button-1>', lambda event, x = "all": taskSys_showTaskDetails(event, x))
 
     # 雙擊查看更多信息
     dbclick = tk.Label(taskSys_searchTask_taskOverview_Win, text = "（雙擊可查看更多信息）")
@@ -994,14 +994,85 @@ def taskSys_searchTask_taskOverview():
     dbclick.place(anchor = "center", x = 512, y = 660)
 
 
-def taskSys_showTaskDetails(event):
-    selectedTaskIndex = taskOverview_listbox.get(taskOverview_listbox.curselection())[0]
-    ls = [selectedTaskIndex, "跑腿", "我這邊有一隻豬，徵求人幫我把它搬運到新體","20"]
-    taskSys_showTaskDetailsWin = tk.Frame()
+def taskSys_searchTask_taskOngoing():
+    """任務總覽介面"""
     # 背景頁建立
-    taskSys_showTaskDetailsWin = tk.Frame(taskSys_searchTask_taskOverview_Win)
-    taskSys_showTaskDetailsWin.config(width = 1024, height = 699, bg = "#363636")
-    taskSys_showTaskDetailsWin.place(x = 0, y = 0)
+    global taskSys_searchTask_taskOngoing_Win
+    taskSys_searchTask_taskOngoing_Win = tk.Frame(taskSys_searchTask_Win)
+    taskSys_searchTask_taskOngoing_Win.config(width = 1024, height = 699, bg = "#363636")
+    taskSys_searchTask_taskOngoing_Win.place(x = 0, y = 0)
+
+    # 返回鍵建立
+    backBtn = tk.Button(taskSys_searchTask_taskOngoing_Win, text = "回到上頁\nBack")
+    backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+    backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+    backBtn.config(command = taskSys_searchTask_taskOngoing_Win.destroy, cursor = "hand2")
+    backBtn.place(anchor = "se",x=1024, y=699)
+
+    # 標題
+    title = tk.Label(taskSys_searchTask_taskOngoing_Win, text = "現有任務")
+    title.config(font = "微軟正黑體 48 bold", bg = "#363636", fg = "white")
+    title.place(anchor = "center", x = 512, y = 60)
+
+    # 內容顯示框
+    global taskSys_searchTask_taskOngoingSection
+    taskSys_searchTask_taskOngoingSection = tk.Frame(taskSys_searchTask_taskOngoing_Win)
+    taskSys_searchTask_taskOngoingSection.config(width = 800, height = 350, bg = "#363636")
+    taskSys_searchTask_taskOngoingSection.place(anchor = "n", x= 512,  y = 130)
+
+    # y軸scrollbar
+    global taskOngoing_Bar
+    taskOngoing_Bar = tk.Scrollbar(taskSys_searchTask_taskOngoingSection)
+    taskOngoing_Bar.pack(side = tk.RIGHT, fill = tk.Y)
+
+    # 放入信息
+    global taskOngoing_listbox
+    taskOngoing_listbox = tk.Listbox(taskSys_searchTask_taskOngoingSection, yscrollcommand = taskOngoing_Bar.set)
+    taskOngoing_listbox.config(font = "FangSong 20 bold", width = 48, height =18, bg = "#5C5C5C", fg = "white")
+    taskOngoing_listbox.config(activestyle = "none", cursor = "hand2")
+
+    #先加入header
+    header = tk.Label(taskSys_searchTask_taskOngoing_Win)
+    tplt_header = "{0:<8}      {1:{3}^10}    {2:>10}"
+    header.config(text = tplt_header.format("No.", "任務名稱","$", chr(12288)), bg = "#363636")
+    header.config(font = "FangSong 20 bold", fg = "white")
+    header.place(anchor = "n", x = 502, y = 95)
+
+    # 再加入用戶記錄
+    global taskSys_searchTask_taskOngoing_ls
+    taskSys_searchTask_taskOngoing_ls = [["1", "跑腿", "20"], ["2", "幫搶課", "100"], ["3", "徵求高鐵票", "500"], ["4", "徵求水源單人房", "10000"], ["5", "徵求人陪吃飯嗚嗚嗚", "200"], ["6", "托福家教", "10000"], ["7", "醬油膏", "1"], ["8", "睡", "500"], ["9", "徵求人類幫忙簽到民概", "200"]]
+    tplt = "{0:<8}      {1:{3}^10}    {2:>10}"
+    for i, content in enumerate(taskSys_searchTask_taskOngoing_ls):
+        taskOngoing_listbox.insert("end", tplt.format(content[0], content[1], content[2], chr(12288)))
+    taskOngoing_listbox.pack(side = tk.LEFT, fill = tk.BOTH)
+    taskOngoing_Bar.config(command = taskOngoing_listbox.yview)
+
+    # 查看任務詳細資訊
+    taskOngoing_listbox.bind('<Double-Button-1>', lambda event, x = "ongoing": taskSys_showTaskDetails(event, x))
+
+    # 雙擊查看更多信息
+    dbclick = tk.Label(taskSys_searchTask_taskOngoing_Win, text = "（雙擊可查看更多信息）")
+    dbclick.config(bg = "#363636", fg = "white", font = "FangSong 16 bold")
+    dbclick.place(anchor = "center", x = 512, y = 660)
+
+
+def taskSys_showTaskDetails(event, mode):
+    if mode == "all":
+        selectedTaskIndex = taskOverview_listbox.get(taskOverview_listbox.curselection())[0]
+        ls = [selectedTaskIndex, "跑腿", "我這邊有一隻豬，徵求人幫我把它搬運到新體","20"]
+        taskSys_showTaskDetailsWin = tk.Frame()
+        # 背景頁建立
+        taskSys_showTaskDetailsWin = tk.Frame(taskSys_searchTask_taskOverview_Win)
+        taskSys_showTaskDetailsWin.config(width = 1024, height = 699, bg = "#363636")
+        taskSys_showTaskDetailsWin.place(x = 0, y = 0)
+    elif mode == "ongoing":
+        selectedTaskIndex = taskOngoing_listbox.get(taskOngoing_listbox.curselection())[0]
+        ls = [selectedTaskIndex, "跑腿", "我這邊有一隻豬，徵求人幫我把它搬運到新體","100"]
+        taskSys_showTaskDetailsWin = tk.Frame()
+        # 背景頁建立
+        taskSys_showTaskDetailsWin = tk.Frame(taskSys_searchTask_taskOngoing_Win)
+        taskSys_showTaskDetailsWin.config(width = 1024, height = 699, bg = "#363636")
+        taskSys_showTaskDetailsWin.place(x = 0, y = 0)
 
     # 返回鍵建立
     backBtn = tk.Button(taskSys_showTaskDetailsWin, text = "回到上頁\nBack")
