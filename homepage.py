@@ -935,6 +935,7 @@ def taskSys_searchTask():
 def taskSys_searchTask_taskOverview():
     """任務總覽介面"""
     # 背景頁建立
+    global taskSys_searchTask_taskOverview_Win
     taskSys_searchTask_taskOverview_Win = tk.Frame(taskSys_searchTask_Win)
     taskSys_searchTask_taskOverview_Win.config(width = 1024, height = 699, bg = "#363636")
     taskSys_searchTask_taskOverview_Win.place(x = 0, y = 0)
@@ -956,30 +957,67 @@ def taskSys_searchTask_taskOverview():
     taskSys_searchTask_taskOverviewSection = tk.Frame(taskSys_searchTask_taskOverview_Win)
     taskSys_searchTask_taskOverviewSection.config(width = 800, height = 350, bg = "#363636")
     taskSys_searchTask_taskOverviewSection.place(anchor = "n", x= 512,  y = 130)
+
     # y軸scrollbar
     global taskOverview_Bar
     taskOverview_Bar = tk.Scrollbar(taskSys_searchTask_taskOverviewSection)
     taskOverview_Bar.pack(side = tk.RIGHT, fill = tk.Y)
+
     # 放入信息
     global taskOverview_listbox
     taskOverview_listbox = tk.Listbox(taskSys_searchTask_taskOverviewSection, yscrollcommand = taskOverview_Bar.set)
     taskOverview_listbox.config(font = "FangSong 20 bold", width = 48, height =18, bg = "#5C5C5C", fg = "white")
-    taskOverview_listbox.config(activestyle = "none")
+    taskOverview_listbox.config(activestyle = "none", cursor = "hand2")
+
     #先加入header
     header = tk.Label(taskSys_searchTask_taskOverview_Win)
     tplt_header = "{0:<8}      {1:{3}^10}    {2:>10}"
     header.config(text = tplt_header.format("No.", "任務名稱","$", chr(12288)), bg = "#363636")
     header.config(font = "FangSong 20 bold", fg = "white")
     header.place(anchor = "n", x = 502, y = 95)
+
     # 再加入用戶記錄
     global taskSys_searchTask_taskOverview_ls
-    # taskSys_searchTask_taskOverview_ls = [["12/11", "daniel", "吃飯", "$1"], ["5/12", "l", "幫", "$100000"], ["12/13", "d", "幫", "$1"], ["12/13", "tallllDaniel", "幫道道道到到到道道道", "$100000"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"]]
     taskSys_searchTask_taskOverview_ls = [["1", "跑腿", "20"], ["2", "幫搶課", "100"], ["3", "徵求高鐵票", "500"], ["4", "徵求水源單人房", "10000"], ["5", "徵求人陪吃飯嗚嗚嗚", "200"], ["6", "托福家教", "10000"], ["7", "醬油膏", "1"], ["8", "睡", "500"], ["9", "徵求人類幫忙簽到民概", "200"]]
     tplt = "{0:<8}      {1:{3}^10}    {2:>10}"
     for i, content in enumerate(taskSys_searchTask_taskOverview_ls):
-        taskOverview_listbox.insert(i + 1, tplt.format(content[0], content[1], content[2], chr(12288)))
+        taskOverview_listbox.insert("end", tplt.format(content[0], content[1], content[2], chr(12288)))
     taskOverview_listbox.pack(side = tk.LEFT, fill = tk.BOTH)
     taskOverview_Bar.config(command = taskOverview_listbox.yview)
+
+    # 查看任務詳細資訊
+    taskOverview_listbox.bind('<Double-Button-1>', taskSys_showTaskDetails)
+
+    # 雙擊查看更多信息
+    dbclick = tk.Label(taskSys_searchTask_taskOverview_Win, text = "（雙擊可查看更多信息）")
+    dbclick.config(bg = "#363636", fg = "white", font = "FangSong 16 bold")
+    dbclick.place(anchor = "center", x = 512, y = 660)
+
+
+def taskSys_showTaskDetails(event):
+    selectedTaskIndex = taskOverview_listbox.get(taskOverview_listbox.curselection())[0]
+    ls = [selectedTaskIndex, "跑腿", "我這邊有一隻豬，徵求人幫我把它搬運到新體","20"]
+    taskSys_showTaskDetailsWin = tk.Frame()
+    # 背景頁建立
+    taskSys_showTaskDetailsWin = tk.Frame(taskSys_searchTask_taskOverview_Win)
+    taskSys_showTaskDetailsWin.config(width = 1024, height = 699, bg = "#363636")
+    taskSys_showTaskDetailsWin.place(x = 0, y = 0)
+
+    # 返回鍵建立
+    backBtn = tk.Button(taskSys_showTaskDetailsWin, text = "回到上頁\nBack")
+    backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+    backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+    backBtn.config(command = taskSys_showTaskDetailsWin.destroy, cursor = "hand2")
+    backBtn.place(anchor = "se",x=1024, y=699)
+
+    # 標題
+    title = tk.Label(taskSys_showTaskDetailsWin, text = "任務 No.{}".format(selectedTaskIndex))
+    title.config(font = "微軟正黑體 48 bold", bg = "#363636", fg = "white")
+    title.place(anchor = "center", x = 512, y = 60)
+
+    # 任務細節
+    # datail = tk.Label(taskSys_showTaskDetailsWin)
+    # datail.config(text)
 
 
 def valueSys():
