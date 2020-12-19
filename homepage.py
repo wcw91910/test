@@ -910,7 +910,7 @@ def valueSys():
     Img_valueSys_addValue = tk.PhotoImage(file = "儲值NTUCoin.png")
     addVauleBtn = tk.Button(valueSysWin)
     addVauleBtn.config(image = Img_valueSys_addValue, width = 790, height = 140)
-    addVauleBtn.config(relief = "flat", cursor = "hand2", command = valueSys_moneyEntry)
+    addVauleBtn.config(relief = "flat", cursor = "hand2", command = valueSys_moneyEntry_money2coin)
     addVauleBtn.place(anchor = "center", x = 512, y = 250)
 
     # 兌換成錢
@@ -918,68 +918,138 @@ def valueSys():
     Img_valueSys_exchange = tk.PhotoImage(file = "兌換成錢.png")
     exchangeBtn = tk.Button(valueSysWin)
     exchangeBtn.config(image = Img_valueSys_exchange, width = 790, height = 140)
-    exchangeBtn.config(relief = "flat", cursor = "hand2", command = valueSys_moneyEntry)
+    exchangeBtn.config(relief = "flat", cursor = "hand2", command = valueSys_moneyEntry_coin2money)
     exchangeBtn.place(anchor = "center", x = 512, y = 440)
 
+    # 顯示餘額
+    balance = getBalance()
+    balanceText = tk.Label(valueSysWin, text = "剩餘{}元".format(balance))
+    balanceText.config(bg = "#363636", fg = "white", font = "微軟正黑體 30 bold")
+    balanceText.place(anchor = "center", x = 512, y = 600)
 
-def valueSys_moneyEntry():
+
+def valueSys_moneyEntry_money2coin():
     """儲值系統_輸入金額"""
     # 背景頁建立
-    moneyEntryWin = tk.Frame(valueSysWin)
-    moneyEntryWin.config(width = 1024, height = 699, bg = "#363636")
-    moneyEntryWin.place(x = 0, y = 0)
+    moneyEntryWin_money2coin = tk.Frame(valueSysWin)
+    moneyEntryWin_money2coin.config(width = 1024, height = 699, bg = "#363636")
+    moneyEntryWin_money2coin.place(x = 0, y = 0)
 
     # 返回鍵建立
-    backBtn = tk.Button(moneyEntryWin, text = "回到上頁\nBack")
+    backBtn = tk.Button(moneyEntryWin_money2coin, text = "回到上頁\nBack")
     backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
     backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
-    backBtn.config(command = moneyEntryWin.destroy, cursor = "hand2")
+    backBtn.config(command = moneyEntryWin_money2coin.destroy, cursor = "hand2")
     backBtn.place(anchor = "se",x=1024, y=699)
 
     # 標題
-    title = tk.Label(moneyEntryWin, text = "儲值系統")
+    title = tk.Label(moneyEntryWin_money2coin, text = "儲值系統")
     title.config(font = "微軟正黑體 48 bold", bg = "#363636", fg = "white")
     title.place(anchor = "center", x = 512, y = 60)
 
     # 金額輸入
-    money = tk.Label(moneyEntryWin, text = "輸入金額")
+    money = tk.Label(moneyEntryWin_money2coin, text = "輸入金額")
     money.config(font = "微軟正黑體 30 bold", bg = "#363636", fg = "white")
     money.place(anchor = "center", x = 512, y = 290)
 
-    global moneyEntryText
-    moneyEntry = tk.Entry(moneyEntryWin)
-    moneyEntryText = tk.StringVar()
-    moneyEntry.config(font = "arial 30", width = 20, textvariable = moneyEntryText)
+    global moneyEntry_money2coinText
+    moneyEntry = tk.Entry(moneyEntryWin_money2coin)
+    moneyEntry_money2coinText = tk.StringVar()
+    moneyEntry.config(font = "arial 30", width = 20, textvariable = moneyEntry_money2coinText)
     moneyEntry.place(anchor = "center", x= 512, y = 350)
 
     # 確認鍵
     global sureImg
     sureImg = tk.PhotoImage(file = "確認.png")
-    sureBtn = tk.Button(moneyEntryWin)
+    sureBtn = tk.Button(moneyEntryWin_money2coin)
     sureBtn.config(image = sureImg, relief = "flat", width = 450, height = 36)
-    sureBtn.config(command = valueSys_moneyEntry_check, cursor = "hand2")
+    sureBtn.config(command = valueSys_moneyEntry_check_money2coin, cursor = "hand2")
     sureBtn.place(anchor = "center", x = 512, y = 430)
 
     # 錯誤信息
-    global moneyEntryW
-    moneyEntryW = tk.StringVar()
-    moneyEntryW.set("")
-    moneyEntryWarning = tk.Label(moneyEntryWin, textvariable = moneyEntryW)
+    global moneyEntryW_money2coin
+    moneyEntryW_money2coin = tk.StringVar()
+    moneyEntryW_money2coin.set("")
+    moneyEntryWarning = tk.Label(moneyEntryWin_money2coin, textvariable = moneyEntryW_money2coin)
     moneyEntryWarning.config(font = "微軟正黑體 12", bg = "#363636", fg = "red")
     moneyEntryWarning.place(anchor = "center", x = 512, y = 393)
 
 
-def valueSys_moneyEntry_check():
+def valueSys_moneyEntry_coin2money():
+    """儲值系統_輸入金額"""
+    # 背景頁建立
+    moneyEntryWin_coin2money = tk.Frame(valueSysWin)
+    moneyEntryWin_coin2money.config(width = 1024, height = 699, bg = "#363636")
+    moneyEntryWin_coin2money.place(x = 0, y = 0)
+
+    # 返回鍵建立
+    backBtn = tk.Button(moneyEntryWin_coin2money, text = "回到上頁\nBack")
+    backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+    backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+    backBtn.config(command = moneyEntryWin_coin2money.destroy, cursor = "hand2")
+    backBtn.place(anchor = "se",x=1024, y=699)
+
+    # 標題
+    title = tk.Label(moneyEntryWin_coin2money, text = "儲值系統")
+    title.config(font = "微軟正黑體 48 bold", bg = "#363636", fg = "white")
+    title.place(anchor = "center", x = 512, y = 60)
+
+    # 金額輸入
+    money = tk.Label(moneyEntryWin_coin2money, text = "輸入金額")
+    money.config(font = "微軟正黑體 30 bold", bg = "#363636", fg = "white")
+    money.place(anchor = "center", x = 512, y = 290)
+
+    global moneyEntryText_coin2moneyText
+    moneyEntryText_coin2money = tk.Entry(moneyEntryWin_coin2money)
+    moneyEntryText_coin2moneyText = tk.StringVar()
+    moneyEntryText_coin2money.config(font = "arial 30", width = 20, textvariable = moneyEntryText_coin2moneyText)
+    moneyEntryText_coin2money.place(anchor = "center", x= 512, y = 350)
+
+    # 確認鍵
+    global sureImg
+    sureImg = tk.PhotoImage(file = "確認.png")
+    sureBtn = tk.Button(moneyEntryWin_coin2money)
+    sureBtn.config(image = sureImg, relief = "flat", width = 450, height = 36)
+    sureBtn.config(command = valueSys_moneyEntry_check_coin2money, cursor = "hand2")
+    sureBtn.place(anchor = "center", x = 512, y = 430)
+
+    # 錯誤信息
+    global moneyEntryW_coin2money
+    moneyEntryW_coin2money = tk.StringVar()
+    moneyEntryW_coin2money.set("")
+    moneyEntryWarning = tk.Label(moneyEntryWin_coin2money, textvariable = moneyEntryW_coin2money)
+    moneyEntryWarning.config(font = "微軟正黑體 12", bg = "#363636", fg = "red")
+    moneyEntryWarning.place(anchor = "center", x = 512, y = 393)
+
+
+def valueSys_moneyEntry_check_money2coin():
     """確認輸入的數字為正整數"""
-    try:
-        data = moneyEntryText.get()
-        data = eval(data)
+    data = eval(moneyEntry_money2coinText.get())
+    left = data%1
+    if left != 0:
+        moneyEntryW_money2coin.set("❕ 請輸入正整數")
+    else:
         if data > 0:
             valueSysWin.destroy()
         else:
-            moneyEntryW.set("❕ 請輸入正整數")
-    except:
-        moneyEntryW.set("❕ 請輸入正整數")
+            moneyEntryW_money2coin.set("❕ 請輸入正整數")
+
+
+def valueSys_moneyEntry_check_coin2money():
+    """確認輸入的數字為正整數"""
+    balance = eval(getBalance())
+    data = eval(moneyEntryText_coin2moneyText.get())
+    left = data%1
+    if left != 0:
+        moneyEntryW_coin2money.set("❕ 請輸入正整數")
+    else:
+        if data > 0:
+            if data > balance:
+                moneyEntryW_coin2money.set("❕ 餘額不足")
+            else:
+                valueSysWin.destroy()
+        else:
+            moneyEntryW_coin2money.set("❕ 請輸入正整數")
 
 
 def recordSys():
@@ -1158,6 +1228,15 @@ def recordSys_search():
     tplt = "{0:<6}{1:^12} {2:{4}^10}{3:>8}"
     for i, content in enumerate(recordSys_record_ls):
         recordSys_listbox.insert(i + 1, tplt.format(content[0], content[1], content[2], content[3], chr(12288)))
+
+
+def getBalance():
+    scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
+    creds = ServiceAccountCredentials.from_json_keyfile_name("NTU Coin-0555c96087e3.json", scope)
+    client = gspread.authorize(creds)
+    sheet = client.open("NTU Coin").get_worksheet(0)  # Open the spreadhseet
+    balance = sheet.row_values(userInfo[0])[4]
+    return balance
 
 
 # 方便pyinstaller將圖片攜帶
