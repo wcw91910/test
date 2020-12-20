@@ -7,6 +7,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from pprint import pprint
 import datetime
+import textwrap
 # from func1_png import img as func1
 # from pageBackground_png import img as pageBackground
 # import base64
@@ -580,13 +581,24 @@ def exchangeSys_normal():
     password.config(textvariable = exchangeSys_normal_Win_passwordText, width = 38, font = "arial 14", show = "●")
     password.place(anchor = "w", x = 300, y = 370)
 
+    # 備註欄
+    remarkTitle = tk.Label(exchangeSys_normal_Win, text = "備註")
+    remarkTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
+    remarkTitle.place(anchor = "w", x = 300, y = 420)
+
+    global exchangeSys_normal_Win_remarkText
+    remark = tk.Entry(exchangeSys_normal_Win)
+    exchangeSys_normal_Win_remarkText = tk.StringVar()
+    remark.config(textvariable = exchangeSys_normal_Win_remarkText, width = 38, font = "arial 14")
+    remark.place(anchor = "w", x = 300, y = 450)
+
     # 確認鍵
     global exchangeSys_normal_Win_sureImg
     exchangeSys_normal_Win_sureImg = tk.PhotoImage(file = "確認.png")
     exchangeSys_normal_Win_sureBtn = tk.Button(exchangeSys_normal_Win)
     exchangeSys_normal_Win_sureBtn.config(image = exchangeSys_normal_Win_sureImg, relief = "flat", width = 450, height = 36)
     exchangeSys_normal_Win_sureBtn.config(command = exchangeSys_normal_check, cursor = "hand2")
-    exchangeSys_normal_Win_sureBtn.place(anchor = "center", x = 512, y = 460)
+    exchangeSys_normal_Win_sureBtn.place(anchor = "center", x = 512, y = 540)
 
     """建立錯誤信息"""
     # 檢查信箱欄
@@ -743,6 +755,7 @@ def exchangeSys_runExchange():
     exchange_info = sheet.row_values(exchange_index)    # 交換帳號帳戶資訊
     exchange_balance = int(exchange_info[4])    # 交換帳號餘額
     exchange_time = datetime.datetime.strftime(datetime.datetime.now(),'%Y-%m-%d %H:%M:%S')  # 交換時間
+    exchange_description = exchangeSys_normal_Win_remarkText.get()
 
     # 更新資訊
     user_balance -= exchange_amount # 扣掉交易數量
@@ -761,25 +774,30 @@ def exchangeSys_runExchange():
     title.place(anchor = "center", x = 512, y = 60)
 
     # 明細內容
-    content = '交換帳號: ' + exchange_account
+    content = '交換帳號： ' + exchange_account
     lab_account = tk.Label(exchangeSys_normal_exchangeDatailWin, text = content)   # 交換帳號
     lab_account.config(bg = "#363636", fg = "white", font = "微軟正黑體 28 bold")
-    lab_account.place(anchor = "w", x = 220, y = 200)
+    lab_account.place(anchor = "w", x = 220, y = 180)
 
-    content = '交換數量: ' + str(exchange_amount)
+    content = '交換數量： ' + str(exchange_amount)
     lab_amount = tk.Label(exchangeSys_normal_exchangeDatailWin, text=content)    # 交換數量
     lab_amount.config(bg = "#363636", fg = "white", font = "微軟正黑體 28 bold")
-    lab_amount.place(anchor = "w", x = 220, y = 300)
+    lab_amount.place(anchor = "w", x = 220, y = 280)
 
-    content = '帳戶餘額: ' + str(user_balance)
+    content = '帳戶餘額： ' + str(user_balance)
     lab_balance = tk.Label(exchangeSys_normal_exchangeDatailWin, text=content)   # 帳戶餘額
     lab_balance.config(bg = "#363636", fg = "white", font = "微軟正黑體 28 bold")
-    lab_balance.place(anchor = "w", x = 220, y = 400)
+    lab_balance.place(anchor = "w", x = 220, y = 380)
 
-    content = '交換時間: ' + exchange_time
+    content = '備註： ' + exchange_description
+    lab_time = tk.Label(exchangeSys_normal_exchangeDatailWin, text=content)      # 備註
+    lab_time.config(bg = "#363636", fg = "white", font = "微軟正黑體 28 bold")
+    lab_time.place(anchor = "w", x = 220, y = 480)
+
+    content = '交換時間： ' + exchange_time
     lab_time = tk.Label(exchangeSys_normal_exchangeDatailWin, text=content)      # 交換數量
     lab_time.config(bg = "#363636", fg = "white", font = "微軟正黑體 28 bold")
-    lab_time.place(anchor = "w", x = 220, y = 500)
+    lab_time.place(anchor = "w", x = 220, y = 580)
 
     # 離開鍵
     exitBtn = tk.Button(exchangeSys_normal_exchangeDatailWin, text = "回到首頁\nHome")
@@ -791,8 +809,8 @@ def exchangeSys_runExchange():
     """上傳紀錄"""
     exchange_record_sheet = client.open("NTU Coin").get_worksheet(2)    # 交換記錄表單
     num_rows = len(exchange_record_sheet.col_values(1))    # 欄位目前長度
-    row1 = [num_rows + 1, 'norm-', userInfo[1], exchange_account, -exchange_amount, user_balance, exchange_time]
-    row2 = [num_rows + 2, 'norm+', exchange_account, userInfo[1], exchange_amount, exchange_balance, exchange_time]
+    row1 = [num_rows + 1, 'norm-', userInfo[1], exchange_account, -exchange_amount, user_balance, exchange_time, exchange_description]
+    row2 = [num_rows + 2, 'norm+', exchange_account, userInfo[1], exchange_amount, exchange_balance, exchange_time, exchange_description]
     insert_rows = [row1, row2]
     exchange_record_sheet.append_rows(insert_rows)    # 新增紀錄
 
@@ -1059,7 +1077,7 @@ def taskSys_searchTask_taskOngoing():
 def taskSys_showTaskDetails(event, mode):
     if mode == "all":
         selectedTaskIndex = taskOverview_listbox.get(taskOverview_listbox.curselection())[0]
-        ls = [selectedTaskIndex, "跑腿", "我這邊有一隻豬，徵求人幫我把它搬運到新體","20"]
+        ls = [selectedTaskIndex, "跑腿", "我這邊有一隻豬，徵求人幫我把它搬運到新體我這邊有一隻豬，徵求人幫我把它搬運到新體我這邊有一隻豬，徵求人幫我把它搬運到新體我這邊有一隻豬，徵求人幫我把它搬運到新體我這邊有一隻豬，徵求人幫我把它搬運到新體我這邊有一隻豬，徵求人幫我把它搬運到新體","20"]
         taskSys_showTaskDetailsWin = tk.Frame()
         # 背景頁建立
         taskSys_showTaskDetailsWin = tk.Frame(taskSys_searchTask_taskOverview_Win)
@@ -1075,11 +1093,11 @@ def taskSys_showTaskDetails(event, mode):
         taskSys_showTaskDetailsWin.place(x = 0, y = 0)
 
     # 返回鍵建立
-    backBtn = tk.Button(taskSys_showTaskDetailsWin, text = "回到上頁\nBack")
-    backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
-    backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
-    backBtn.config(command = taskSys_showTaskDetailsWin.destroy, cursor = "hand2")
-    backBtn.place(anchor = "se",x=1024, y=699)
+    # backBtn = tk.Button(taskSys_showTaskDetailsWin, text = "回到上頁\nBack")
+    # backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
+    # backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
+    # backBtn.config(command = taskSys_showTaskDetailsWin.destroy, cursor = "hand2")
+    # backBtn.place(anchor = "se",x=1024, y=699)
 
     # 標題
     title = tk.Label(taskSys_showTaskDetailsWin, text = "任務 No.{}".format(selectedTaskIndex))
@@ -1087,9 +1105,31 @@ def taskSys_showTaskDetails(event, mode):
     title.place(anchor = "center", x = 512, y = 60)
 
     # 任務細節
-    # datail = tk.Label(taskSys_showTaskDetailsWin)
-    # datail.config(text)
+    datail = tk.Label(taskSys_showTaskDetailsWin)
+    content = textwrap.wrap(ls[2], 20)
+    text = "任務名稱：{}\n\n任務內容：\n".format(ls[1])
+    for sentence in content:
+        text += sentence
+        text += "\n"
+    text += "\n任務報酬：{}".format(ls[3])
+    datail.config(text = text, font = "微軟正黑體 22 bold", bg = "#363636", fg = "white")
+    datail.place(anchor = "n", x = 512, y = 200)
 
+    # 接受按鍵
+    global Img_taskSys_showTaskDetails_accept
+    Img_taskSys_showTaskDetails_accept = tk.PhotoImage(file = "接受.png")
+    acceptBtn = tk.Button(taskSys_showTaskDetailsWin)
+    acceptBtn.config(image = Img_taskSys_showTaskDetails_accept, width = 72, height = 32)
+    acceptBtn.config(relief = "flat", cursor = "hand2", command = taskSys_showTaskDetailsWin.destroy)
+    acceptBtn.place(anchor = "center", x = 400, y = 150)
+
+    # 拒絕按鍵
+    global Img_taskSys_showTaskDetails_reject
+    Img_taskSys_showTaskDetails_reject = tk.PhotoImage(file = "拒絕.png")
+    rejectBtn = tk.Button(taskSys_showTaskDetailsWin)
+    rejectBtn.config(image = Img_taskSys_showTaskDetails_reject, width = 72, height = 32)
+    rejectBtn.config(relief = "flat", cursor = "hand2", command = taskSys_showTaskDetailsWin.destroy)
+    rejectBtn.place(anchor = "center", x = 624, y = 150)
 
 def valueSys():
     """儲值系統"""
