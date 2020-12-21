@@ -9,6 +9,7 @@ from pprint import pprint
 import datetime
 import textwrap
 import random
+import time
 # from func1_png import img as func1
 # from pageBackground_png import img as pageBackground
 # import base64
@@ -910,8 +911,80 @@ def taskSys_releaseTask():
     taskSys_releaseTask_Win_submitImg = tk.PhotoImage(file = "確認.png")
     taskSys_releaseTask_Win_sureBtn = tk.Button(taskSys_releaseTask_Win)
     taskSys_releaseTask_Win_sureBtn.config(image = taskSys_releaseTask_Win_submitImg, relief = "flat", width = 450, height = 36)
-    taskSys_releaseTask_Win_sureBtn.config(cursor = "hand2")
+    taskSys_releaseTask_Win_sureBtn.config(cursor = "hand2", command = taskSys_releaseTaskCheck)
     taskSys_releaseTask_Win_sureBtn.place(anchor = "center", x = 512, y = 460)
+
+    """錯誤信息欄"""
+    # 檢查名稱欄
+    global taskSys_releaseTask_Win_nameWarning
+    taskSys_releaseTask_Win_nameWarning = tk.StringVar()
+    taskSys_releaseTask_Win_nameWarning.set("")
+    nameWarning = tk.Label(taskSys_releaseTask_Win, textvariable = taskSys_releaseTask_Win_nameWarning)
+    nameWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
+    nameWarning.place(anchor = "w", x = 300, y = 235)
+
+    # 檢查內容欄
+    global taskSys_releaseTask_Win_contentWarning
+    taskSys_releaseTask_Win_contentWarning = tk.StringVar()
+    taskSys_releaseTask_Win_contentWarning.set("")
+    contentWarning = tk.Label(taskSys_releaseTask_Win, textvariable = taskSys_releaseTask_Win_contentWarning)
+    contentWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
+    contentWarning.place(anchor = "w", x = 300, y = 315)
+
+    # 檢查報酬欄
+    global taskSys_releaseTask_Win_paymentWarning
+    taskSys_releaseTask_Win_paymentWarning = tk.StringVar()
+    taskSys_releaseTask_Win_paymentWarning.set("")
+    paymentWarning = tk.Label(taskSys_releaseTask_Win, textvariable = taskSys_releaseTask_Win_paymentWarning)
+    paymentWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
+    paymentWarning.place(anchor = "w", x = 300, y = 395)
+
+
+def taskSys_releaseTaskCheck():
+    name = taskSys_releaseTask_Win_nameText.get()
+    content = taskSys_releaseTask_Win_contentText.get()
+    payment = taskSys_releaseTask_Win_paymentText.get()
+    taskSys_releaseTask_Win_nameWarning.set("")
+    rightName = False
+    rightContent = False
+    rightPayment = False
+
+    # 檢查名稱
+    if len(name) > 10:
+        taskSys_releaseTask_Win_nameWarning.set("❕ 名稱過長")
+        rightName = False
+    else:
+        if is_all_chinese(name):
+            taskSys_releaseTask_Win_nameWarning.set("")
+            rightName = True
+        else:
+            taskSys_releaseTask_Win_nameWarning.set("❕ 名稱不符合格式")
+            rightName = False
+
+    # 檢查內容
+    if len(content) > 140:
+        taskSys_releaseTask_Win_contentWarning.set("❕ 內容過長")
+        rightContent = False
+    else:
+        taskSys_releaseTask_Win_contentWarning.set("")
+        rightContent = True
+
+    # 檢查報酬
+    data = eval(payment)
+    left = data%1
+    if left != 0:
+        taskSys_releaseTask_Win_paymentWarning.set("❕ 請輸入正整數")
+        rightPayment = False
+    else:
+        if data > 0:
+            taskSys_releaseTask_Win_paymentWarning.set("")
+            rightPayment = True
+        else:
+            taskSys_releaseTask_Win_paymentWarning.set("❕ 請輸入正整數")
+            rightPayment = False
+    
+    if rightName and rightContent and rightPayment:
+        taskSysWin.destroy()
 
 
 def taskSys_searchTask():
@@ -1226,6 +1299,7 @@ def valueSys_moneyEntry_money2coin():
 def valueSys_moneyEntry_coin2money():
     """儲值系統_輸入金額"""
     # 背景頁建立
+    global moneyEntryWin_coin2money
     moneyEntryWin_coin2money = tk.Frame(valueSysWin)
     moneyEntryWin_coin2money.config(width = 1024, height = 699, bg = "#363636")
     moneyEntryWin_coin2money.place(x = 0, y = 0)
@@ -1278,6 +1352,7 @@ def valueSys_moneyEntry_check_money2coin():
         moneyEntryW_money2coin.set("❕ 請輸入正整數")
     else:
         if data > 0:
+            valueSys_runMoney2coin()
             valueSysWin.destroy()
         else:
             moneyEntryW_money2coin.set("❕ 請輸入正整數")
@@ -1288,6 +1363,7 @@ def valueSys_moneyEntry_check_coin2money():
     balance = eval(getBalance())
     data = eval(moneyEntryText_coin2moneyText.get())
     left = data%1
+
     if left != 0:
         moneyEntryW_coin2money.set("❕ 請輸入正整數")
     else:
@@ -1295,9 +1371,58 @@ def valueSys_moneyEntry_check_coin2money():
             if data > balance:
                 moneyEntryW_coin2money.set("❕ 餘額不足")
             else:
+                valueSys_runCoin2money()
                 valueSysWin.destroy()
         else:
             moneyEntryW_coin2money.set("❕ 請輸入正整數")
+
+
+def valueSys_runMoney2coin():
+    scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets', "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
+
+    creds = ServiceAccountCredentials.from_json_keyfile_name("NTU Coin-0555c96087e3.json", scope)
+
+    client = gspread.authorize(creds)
+
+    sheet_coin_money = client.open ("NTU Coin").get_worksheet(4)  # Open the spreadhseet
+    sheet_userInfo = client.open ("NTU Coin").get_worksheet(0)
+
+    money = eval(moneyEntry_money2coinText.get())  # 改成輸入的數字
+
+    banlance = eval(getBalance())
+    newBalance = str(banlance + money)
+
+    sheet_userInfo.update_cell(userInfo[0], 5, newBalance)  #　更改userInfo 的 Balance
+
+    now = datetime.datetime.now()
+    dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
+    index = int(len(sheet_coin_money.col_values(1)))
+    record = [index, 'norm+', userInfo[1], userInfo[1], money, dt_string]
+    sheet_coin_money.append_row(record)
+
+
+def valueSys_runCoin2money():    
+    scope = ["https://spreadsheets.google.com/feeds", 'https://www.googleapis.com/auth/spreadsheets', "https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/drive"]
+
+    creds = ServiceAccountCredentials.from_json_keyfile_name("NTU Coin-0555c96087e3.json", scope)
+
+    client = gspread.authorize(creds)
+
+    sheet_coin_money = client.open ("NTU Coin").get_worksheet(4)  # Open the spreadhseet
+    sheet_userInfo = client.open ("NTU Coin").get_worksheet(0)
+
+    money = -eval(moneyEntryText_coin2moneyText.get())  # 要改成負的
+
+    balance = eval(getBalance())
+    newBalance = str(balance + money)
+
+    sheet_userInfo.update_cell(userInfo[0], 5, newBalance)  #　更改userInfo 的 Balance
+
+    now = datetime.datetime.now()
+    dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
+    index = int(len(sheet_coin_money.col_values(1)))
+    record = [index, 'norm-', userInfo[1], userInfo[1], money, dt_string]
+    sheet_coin_money.append_row(record)
 
 
 def recordSys():
@@ -1498,6 +1623,13 @@ def getBalance():
     sheet = client.open("NTU Coin").get_worksheet(0)  # Open the spreadhseet
     balance = sheet.row_values(userInfo[0])[4]
     return balance
+
+
+def is_all_chinese(string):
+    for word in string:
+        if not '\u4e00' <= word <= '\u9fa5':
+            return False
+    return True
 
 
 # 方便pyinstaller將圖片攜帶
