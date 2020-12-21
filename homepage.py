@@ -984,7 +984,21 @@ def taskSys_releaseTaskCheck():
             rightPayment = False
     
     if rightName and rightContent and rightPayment:
+        taskSys_establish_mission(userInfo[1], name, content, payment)
         taskSysWin.destroy()
+
+
+def taskSys_establish_mission(submitter_account, mission_name, mission_content, payment):
+    scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
+    creds = ServiceAccountCredentials.from_json_keyfile_name("NTU Coin-0555c96087e3.json", scope)
+    client = gspread.authorize(creds)
+    sheet = client.open("NTU Coin").worksheet("Missions")
+    sub_time_create = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
+    mission_index = int(len(sheet.col_values(1)))+1
+    status = "on-going"
+    account = submitter_account
+    lst = [mission_index, account, mission_name, mission_content, payment, status, sub_time_create]
+    sheet.append_row(lst)
 
 
 def taskSys_searchTask():
@@ -1070,7 +1084,7 @@ def taskSys_searchTask_taskOverview():
 
     # 再加入用戶記錄
     global taskSys_searchTask_taskOverview_ls
-    taskSys_searchTask_taskOverview_ls = [["1", "跑腿", "20"], ["2", "幫搶課", "100"], ["3", "徵求高鐵票", "500"], ["4", "徵求水源單人房", "10000"], ["5", "徵求人陪吃飯嗚嗚嗚", "200"], ["6", "托福家教", "10000"], ["7", "醬油膏", "1"], ["8", "睡", "500"], ["9", "徵求人類幫忙簽到民概", "200"]]
+    taskSys_searchTask_taskOverview_ls = taskSys_get_all_tasks()
     tplt = "{0:<8}      {1:{3}^10}    {2:>10}"
     for i, content in enumerate(taskSys_searchTask_taskOverview_ls):
         taskOverview_listbox.insert("end", tplt.format(content[0], content[1], content[2], chr(12288)))
@@ -1150,8 +1164,11 @@ def taskSys_searchTask_taskOngoing():
 
 def taskSys_showTaskDetails(event, mode):
     if mode == "all":
-        selectedTaskIndex = taskOverview_listbox.get(taskOverview_listbox.curselection())[0]
-        ls = [selectedTaskIndex, "跑腿", "我這邊有一隻豬，徵求人幫我把它搬運到新體我這邊有一隻豬，徵求人幫我把它搬運到新體我這邊有一隻豬，徵求人幫我把它搬運到新體我這邊有一隻豬，徵求人幫我把它搬運到新體我這邊有一隻豬，徵求人幫我把它搬運到新體我這邊有一隻豬，徵求人幫我把它搬運到新體","20"]
+        data = taskOverview_listbox.get(taskOverview_listbox.curselection())
+        print(data)
+        index = re.findall(r"^[0-9]*", data)
+        ls = [index[0], "跑腿", "我這邊有一隻豬，徵求人幫我把它搬運到新體","100"]
+        print(index[0])
         taskSys_showTaskDetailsWin = tk.Frame()
         # 背景頁建立
         taskSys_showTaskDetailsWin = tk.Frame(taskSys_searchTask_taskOverview_Win)
@@ -1174,7 +1191,7 @@ def taskSys_showTaskDetails(event, mode):
     # backBtn.place(anchor = "se",x=1024, y=699)
 
     # 標題
-    title = tk.Label(taskSys_showTaskDetailsWin, text = "任務 No.{}".format(selectedTaskIndex))
+    title = tk.Label(taskSys_showTaskDetailsWin, text = "任務 No.{}".format(index[0]))
     title.config(font = "微軟正黑體 48 bold", bg = "#363636", fg = "white")
     title.place(anchor = "center", x = 512, y = 60)
 
@@ -1204,6 +1221,20 @@ def taskSys_showTaskDetails(event, mode):
     rejectBtn.config(image = Img_taskSys_showTaskDetails_reject, width = 72, height = 32)
     rejectBtn.config(relief = "flat", cursor = "hand2", command = taskSys_showTaskDetailsWin.destroy)
     rejectBtn.place(anchor = "center", x = 624, y = 150)
+
+
+def taskSys_get_all_tasks():
+    display_list = []
+    scope = ["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
+    creds = ServiceAccountCredentials.from_json_keyfile_name("NTU Coin-0555c96087e3.json", scope)
+    client = gspread.authorize(creds)
+    mission_summary = client.open("NTU Coin").worksheet("Missions")
+    for i in range(len(mission_summary.col_values(1))):
+        if mission_summary.cell(i + 1,6).value == 'on-going':
+            ls = mission_summary.row_values(i + 1)
+            lst = [ls[0], ls[2], ls[4]]
+            display_list.append(lst)
+    return display_list
 
 
 def valueSys():
