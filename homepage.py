@@ -8,6 +8,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 from pprint import pprint
 import datetime
 import textwrap
+import random
 # from func1_png import img as func1
 # from pageBackground_png import img as pageBackground
 # import base64
@@ -1131,6 +1132,7 @@ def taskSys_showTaskDetails(event, mode):
     rejectBtn.config(relief = "flat", cursor = "hand2", command = taskSys_showTaskDetailsWin.destroy)
     rejectBtn.place(anchor = "center", x = 624, y = 150)
 
+
 def valueSys():
     """儲值系統"""
     # 背景頁建立
@@ -1387,12 +1389,14 @@ def recordSys():
     recordSys_ckbtn_rev.config(text = "收入", font = "FangSong 16 bold", fg = "white", bg = "#363636")
     recordSys_ckbtn_rev.config(variable = recordSys_ckbtn_var, value = 0, state = "disable")
     recordSys_ckbtn_rev.config(activebackground = "#363636", activeforeground	= "white", selectcolor = "#5C5C5C")
+    recordSys_ckbtn_rev.config(command = recordSys_search_changeType)
     recordSys_ckbtn_rev.place(anchor = "e", x = 220, y = 250)
 
     recordSys_ckbtn_exp = tk.Radiobutton(recordSysWin)
     recordSys_ckbtn_exp.config(text = "支出", font = "FangSong 16 bold", fg = "white", bg = "#363636")
     recordSys_ckbtn_exp.config(variable = recordSys_ckbtn_var, value = 1, state = "disable")
     recordSys_ckbtn_exp.config(activebackground = "#363636", activeforeground	= "white", selectcolor = "#5C5C5C")
+    recordSys_ckbtn_exp.config(command = recordSys_search_changeType)
     recordSys_ckbtn_exp.place(anchor = "w", x = 220, y = 250)
 
     # 內容顯示框
@@ -1471,6 +1475,17 @@ def recordSys_search():
     recordSys_ckbtn_var.set(0)
     recordSys_listbox.delete(1, "end")
     recordSys_record_ls = [["12/11", "daniel", "吃飯", "$1"], ["5/12", "l", "幫", "$100000"], ["12/13", "d", "幫", "$1"], ["12/13", "tallllDaniel", "幫道道道到到到道道道", "$100000"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"]]
+    tplt = "{0:<6}{1:^12} {2:{4}^10}{3:>8}"
+    for i, content in enumerate(recordSys_record_ls):
+        recordSys_listbox.insert(i + 1, tplt.format(content[0], content[1], content[2], content[3], chr(12288)))
+
+
+def recordSys_search_changeType():
+    recordSys_listbox.delete(1, "end")
+    if recordSys_ckbtn_var.get() == 1:
+        recordSys_record_ls = [["12/13", "d", "幫", "$1"], ["12/13", "tallllDaniel", "幫道道道到到到道道道", "$100000"]]
+    else:
+        recordSys_record_ls = [["12/11", "daniel", "吃飯", "$1"], ["5/12", "l", "幫", "$100000"], ["12/13", "d", "幫", "$1"], ["12/13", "tallllDaniel", "幫道道道到到到道道道", "$100000"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"]]
     tplt = "{0:<6}{1:^12} {2:{4}^10}{3:>8}"
     for i, content in enumerate(recordSys_record_ls):
         recordSys_listbox.insert(i + 1, tplt.format(content[0], content[1], content[2], content[3], chr(12288)))
