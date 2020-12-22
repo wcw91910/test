@@ -1165,30 +1165,22 @@ def taskSys_searchTask_taskOngoing():
 def taskSys_showTaskDetails(event, mode):
     if mode == "all":
         data = taskOverview_listbox.get(taskOverview_listbox.curselection())
-        print(data)
         index = re.findall(r"^[0-9]*", data)
         ls = [index[0], "跑腿", "我這邊有一隻豬，徵求人幫我把它搬運到新體","100"]
-        print(index[0])
         taskSys_showTaskDetailsWin = tk.Frame()
         # 背景頁建立
         taskSys_showTaskDetailsWin = tk.Frame(taskSys_searchTask_taskOverview_Win)
         taskSys_showTaskDetailsWin.config(width = 1024, height = 699, bg = "#363636")
         taskSys_showTaskDetailsWin.place(x = 0, y = 0)
     elif mode == "ongoing":
-        selectedTaskIndex = taskOngoing_listbox.get(taskOngoing_listbox.curselection())[0]
-        ls = [selectedTaskIndex, "跑腿", "我這邊有一隻豬，徵求人幫我把它搬運到新體","100"]
+        data = taskOngoing_listbox.get(taskOngoing_listbox.curselection())
+        index = re.findall(r"^[0-9]*", data)
+        ls = [index[0], "跑腿", "我這邊有一隻豬，徵求人幫我把它搬運到新體","100"]
         taskSys_showTaskDetailsWin = tk.Frame()
         # 背景頁建立
         taskSys_showTaskDetailsWin = tk.Frame(taskSys_searchTask_taskOngoing_Win)
         taskSys_showTaskDetailsWin.config(width = 1024, height = 699, bg = "#363636")
         taskSys_showTaskDetailsWin.place(x = 0, y = 0)
-
-    # 返回鍵建立
-    # backBtn = tk.Button(taskSys_showTaskDetailsWin, text = "回到上頁\nBack")
-    # backBtn.config(font = "微軟正黑體 15 bold", bg = "#363636", fg = "white", relief = "flat")
-    # backBtn.config(activebackground = "#363636", activeforeground = "#DF2935")
-    # backBtn.config(command = taskSys_showTaskDetailsWin.destroy, cursor = "hand2")
-    # backBtn.place(anchor = "se",x=1024, y=699)
 
     # 標題
     title = tk.Label(taskSys_showTaskDetailsWin, text = "任務 No.{}".format(index[0]))

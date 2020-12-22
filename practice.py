@@ -98,7 +98,7 @@ def select_category(records, param2):
         new_records = records
     else:
         for i in range(len(records)):
-            if records[i].get('Category') == param2:
+            if records[i].get('category') == param2:
                 new_records.append(records[i])
     
     return new_records
@@ -137,29 +137,30 @@ for i in (income_records, payment_records):
     if button2 == '儲值記錄':
         selected.append(category_records)
     else:
-        if button3 == '1':
+        if button3 == '-無-':
             selected.append(category_records)
         else:
             key_records = select_key(category_records, button3, button4)
             selected.append(key_records)
-print(time_records)
+# print(time_records)
 print(selected)
-# # 將篩選結果轉換為清單儲存
-# def output_records(records):
-#     output = []
 
-#     for i in range(len(records)):
-#         date = records[i].get('Time')
-#         account = records[i].get('Exchange Account')
-#         category = records[i].get('Category')
-#         description = records[i].get('Description')
-#         amount = int(records[i].get('Amount'))
-#         temp = [date, account, category, description, amount]
-#         output.append(temp)
+# 將篩選結果轉換為清單儲存
+def output_records(records):
+    output = []
+
+    for i in range(len(records)):
+        date = records[i].get('Time')
+        account = records[i].get('Exchange Account')
+        category = records[i].get('category')
+        description = records[i].get('Description')
+        amount = int(records[i].get('Amount'))
+        temp = [date, account, category, description, amount]
+        output.append(temp)
     
-#     return output
+    return output
 
-# result_income = output_records(selected[0])  # 檢索結果：收入
-# print(result_income)
+result_income = output_records(selected[0])  # 檢索結果：收入
+print(result_income)
 # result_payment = output_records(selected[1]) # 檢索結果：支出
 # print(result_payment)
