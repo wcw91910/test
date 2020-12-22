@@ -165,4 +165,4 @@ def output_records(records):
 result_income = output_records(selected[0])  # 檢索結果：收入
 # print(result_income)
 result_payment = output_records(selected[1]) # 檢索結果：支出
-# print(result_payment)
+print(result_payment)
