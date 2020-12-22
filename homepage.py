@@ -1420,7 +1420,7 @@ def valueSys_runMoney2coin():
     now = datetime.datetime.now()
     dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
     index = int(len(sheet_coin_money.col_values(1)))
-    record = [index, 'norm+', userInfo[1], userInfo[1], money, dt_string]
+    record = [index, 'norm+', userInfo[1], userInfo[1], money, dt_string, "儲值"]
     sheet_coin_money.append_row(record)
 
 
@@ -1444,7 +1444,7 @@ def valueSys_runCoin2money():
     now = datetime.datetime.now()
     dt_string = now.strftime("%Y-%m-%d %H:%M:%S")
     index = int(len(sheet_coin_money.col_values(1)))
-    record = [index, 'norm-', userInfo[1], userInfo[1], money, dt_string]
+    record = [index, 'norm-', userInfo[1], userInfo[1], money, dt_string, "提領"]
     sheet_coin_money.append_row(record)
 
 
@@ -1472,12 +1472,13 @@ def recordSys():
     timeLabel1.config(font = "微軟正黑體 20 bold", bg = "#363636", fg = "white")
     timeLabel1.place(anchor = "center", x = 150, y = 125)
 
-    timeBox = ttk.Combobox(recordSysWin, font = "微軟正黑體 16 bold")
-    timeBox["value"] = ("全部", "過去一週", "過去一月", "過去一年")
-    timeBox.config(width = 12, justify = "center")
-    timeBox["state"] = "readonly"
-    timeBox.current(0)
-    timeBox.place(anchor = "center", x = 150, y = 160)
+    global recordSys_timeBox
+    recordSys_timeBox = ttk.Combobox(recordSysWin, font = "微軟正黑體 16 bold")
+    recordSys_timeBox["value"] = ("全部", "過去一週", "過去一月", "過去一年")
+    recordSys_timeBox.config(width = 12, justify = "center")
+    recordSys_timeBox["state"] = "readonly"
+    recordSys_timeBox.current(0)
+    recordSys_timeBox.place(anchor = "center", x = 150, y = 160)
     
     # 類別選擇欄
     classLabel1 = tk.Label(recordSysWin, text = "種類")
@@ -1534,18 +1535,18 @@ def recordSys():
     global recordSys_ckbtn_var
     recordSys_ckbtn_rev = tk.Radiobutton(recordSysWin)
     recordSys_ckbtn_var = tk.IntVar()
-    recordSys_ckbtn_rev.config(text = "收入", font = "FangSong 16 bold", fg = "white", bg = "#363636")
+    recordSys_ckbtn_rev.config(text = "收入", font = "FangSong 20 bold", fg = "white", bg = "#363636")
     recordSys_ckbtn_rev.config(variable = recordSys_ckbtn_var, value = 0, state = "disable")
     recordSys_ckbtn_rev.config(activebackground = "#363636", activeforeground	= "white", selectcolor = "#5C5C5C")
     recordSys_ckbtn_rev.config(command = recordSys_search_changeType)
-    recordSys_ckbtn_rev.place(anchor = "e", x = 220, y = 250)
+    recordSys_ckbtn_rev.place(anchor = "e", x = 145, y = 250)
 
     recordSys_ckbtn_exp = tk.Radiobutton(recordSysWin)
-    recordSys_ckbtn_exp.config(text = "支出", font = "FangSong 16 bold", fg = "white", bg = "#363636")
+    recordSys_ckbtn_exp.config(text = "支出", font = "FangSong 20 bold", fg = "white", bg = "#363636")
     recordSys_ckbtn_exp.config(variable = recordSys_ckbtn_var, value = 1, state = "disable")
     recordSys_ckbtn_exp.config(activebackground = "#363636", activeforeground	= "white", selectcolor = "#5C5C5C")
     recordSys_ckbtn_exp.config(command = recordSys_search_changeType)
-    recordSys_ckbtn_exp.place(anchor = "w", x = 220, y = 250)
+    recordSys_ckbtn_exp.place(anchor = "w", x = 145, y = 250)
 
     # 內容顯示框
     global recordSys_revenueSection
@@ -1561,19 +1562,19 @@ def recordSys():
     # 放入信息
     global recordSys_listbox
     recordSys_listbox = tk.Listbox(recordSys_revenueSection, yscrollcommand = recordSys_revenueBar1.set)
-    recordSys_listbox.config(font = "FangSong 20 bold", width = 48, height =13, bg = "#5C5C5C", fg = "white")
+    recordSys_listbox.config(font = "FangSong 20 bold", width = 60, height =13, bg = "#5C5C5C", fg = "white")
     recordSys_listbox.config(selectbackground = "#5C5C5C", activestyle = "none")
     #先加入header
-    header = ["日期", "用戶名稱", "內容", "金額"]
-    tplt_header = "{0:{4}<3} {1:{4}^6} {2:{4}^10} {3:{4}>4}"
-    recordSys_listbox.insert(0, tplt_header.format(header[0], header[1], header[2], header[3], chr(12288)))
+    header = ["日期", "用戶名", "種類", "內容", "金額"]
+    tplt_header = "{0:{5}^6}{1:{5}^5}   {2:{5}^4}{3:{5}^10} {4:{5}>4}"
+    recordSys_listbox.insert(0, tplt_header.format(header[0], header[1], header[2], header[3], header[4], chr(12288)))
     # 再加入用戶記錄
     global recordSys_record_ls
     # recordSys_record_ls = [["12/11", "daniel", "吃飯", "$1"], ["5/12", "l", "幫", "$100000"], ["12/13", "d", "幫", "$1"], ["12/13", "tallllDaniel", "幫道道道到到到道道道", "$100000"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"]]
-    recordSys_record_ls = [[" ", " ", chr(12288), " "]]*10
-    tplt = "{0:<6}{1:^12} {2:{4}^10}{3:>8}"
+    recordSys_record_ls = [[" ", " ", chr(12288), chr(12288), " "]]*10
+    tplt = "{0:^12}{1:^10}{5}{2:{5}^4}{3:{5}^10}{4:^8}"
     for i, content in enumerate(recordSys_record_ls):
-        recordSys_listbox.insert(i + 1, tplt.format(content[0], content[1], content[2], content[3], chr(12288)))
+        recordSys_listbox.insert(i + 1, tplt.format(content[0], content[1], content[2], content[3], content[4],chr(12288)))
     recordSys_listbox.pack(side = tk.LEFT, fill = tk.BOTH)
     recordSys_revenueBar1.config(command = recordSys_listbox.yview)
     
@@ -1622,10 +1623,10 @@ def recordSys_search():
     recordSys_ckbtn_exp.config(state = "normal")
     recordSys_ckbtn_var.set(0)
     recordSys_listbox.delete(1, "end")
-    recordSys_record_ls = [["12/11", "daniel", "吃飯", "$1"], ["5/12", "l", "幫", "$100000"], ["12/13", "d", "幫", "$1"], ["12/13", "tallllDaniel", "幫道道道到到到道道道", "$100000"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"], ["5/12", "tallllDaniel", "幫", "$100000"], ["12/13", "dogg", "幫", "$10"], ["12/13", "dogg", "幫道道道到", "$10"]]
-    tplt = "{0:<6}{1:^12} {2:{4}^10}{3:>8}"
+    recordSys_record_ls = recordSys_getList(1)
+    tplt = "{0:^12}{1:^10}{5}{2:{5}^4}{3:{5}^10}{4:>8}"
     for i, content in enumerate(recordSys_record_ls):
-        recordSys_listbox.insert(i + 1, tplt.format(content[0], content[1], content[2], content[3], chr(12288)))
+        recordSys_listbox.insert(i + 1, tplt.format(content[0], content[1], content[2], content[3], content[4], chr(12288)))
 
 
 def recordSys_search_changeType():
@@ -1637,6 +1638,174 @@ def recordSys_search_changeType():
     tplt = "{0:<6}{1:^12} {2:{4}^10}{3:>8}"
     for i, content in enumerate(recordSys_record_ls):
         recordSys_listbox.insert(i + 1, tplt.format(content[0], content[1], content[2], content[3], chr(12288)))
+
+
+def recordSys_getList(mode):
+    scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/spreadsheets',
+    'https://www.googleapis.com/auth/drive.file','https://www.googleapis.com/auth/drive']
+
+    creds = ServiceAccountCredentials.from_json_keyfile_name('NTU Coin-0555c96087e3.json', scope)
+    client = gspread.authorize(creds)
+
+    # 把第X張worksheet的資料用爬蟲爬下來
+    def crawler(worksheet_index):
+        sheet = client.open('NTU Coin').get_worksheet(worksheet_index)
+        data = sheet.get_all_records()
+        return data
+
+    rawExchange = crawler(2)
+    rawSaving = crawler(4)
+    rawMission = crawler(5)
+
+    # 將各張worksheet的資料加上屬於該worksheet的類別
+    def add_category(records, category_name):
+        for i in range(len(records)):
+            records[i]['category'] = category_name
+        return records
+
+    ExchangeRecords = add_category(rawExchange, '貨幣交換')
+    SavingRecords = add_category(rawSaving, '儲值記錄')
+    MissionRecords = add_category(rawMission, '任務記錄')
+
+    # 將各張worksheet的資料合併為一個list
+    data = []
+    for i in (ExchangeRecords, SavingRecords, MissionRecords):
+        for j in range(len(i)):
+            data.append(i[j])
+
+    # print(data)
+    # 更改日期格式
+    def trans_time(adict):
+        origin_time = adict.get('Time')
+        new_time = origin_time[:10]
+        adict['Time'] = new_time
+        return adict
+
+    user = userInfo[1]
+
+    # 挑出資料庫中，指定user的記錄
+    all_user_records = []
+    for i in range(len(data)):
+        if data[i].get('Account') == user:
+            all_user_records.append(trans_time(data[i]))
+
+    # 依照日期排序
+    all_user_records.sort(key=lambda all_user_records:all_user_records["Time"]) 
+
+    # 分為收入與支出
+    income_records = []  # 收入記錄
+    payment_records = [] # 支出記錄
+    for i in range(len(all_user_records)):
+        if all_user_records[i].get('Status') == 'norm-':
+            payment_records.append(all_user_records[i])
+        else:
+            income_records.append(all_user_records[i])
+
+    # print(payment_records)
+
+    # 時間篩選器
+
+    current_date = time.strftime('%Y-%m-%d')
+    week_ago = (datetime.datetime.now() + datetime.timedelta(days=-7)).strftime('%Y-%m-%d')
+    month_ago = (datetime.datetime.now() + datetime.timedelta(days=-30)).strftime('%Y-%m-%d')
+    year_ago = (datetime.datetime.now() + datetime.timedelta(days=-365)).strftime('%Y-%m-%d')
+
+    def select_time(records, param1):
+        new_records = []
+        if param1 == '全部':
+            new_records = records
+        elif param1 == '過去一週':
+            for i in range(len(records)):
+                if records[i].get('Time') >= week_ago:
+                    new_records.append(records[i])
+        elif param1 == '過去一月':
+            for i in range(len(records)):
+                if records[i].get('Time') >= month_ago:
+                    new_records.append(records[i])
+        else:  # param1 == '過去一年'
+            for i in range(len(records)):
+                if records[i].get('Time') >= year_ago:
+                    new_records.append(records[i])
+
+        return new_records
+
+    # 類別篩選器
+    def select_category(records, param2):
+        new_records = []
+        if param2 == '全部':
+            new_records = records
+        else:
+            for i in range(len(records)):
+                if records[i].get('category') == param2:
+                    new_records.append(records[i])
+        
+        return new_records
+
+    # 關鍵字篩選器
+    def select_key(records, param3, param4):
+        new_records = []
+        for i in range(len(records)):
+            if param3 == '用戶名':
+                if records[i].get('Exchange Account') == param4:
+                    new_records.append(records[i])
+            elif param3 == '關鍵字':
+                if param4 in records[i].get('內容'):
+                    new_records.append(records[i])
+            else:
+                pass
+
+        return new_records
+
+    # 與GUI連結，讓使用者自訂查詢依據
+    button1 = recordSys_timeBox.get()
+    button2 = recordSys_classBox.get()
+    button3 = recordSys_typeBox.get()
+    button4 = recordSys_keywordEntryText.get()
+
+    # [篩選後的收入記錄，篩選後的支出記錄]
+    selected = []
+    # print(income_records)
+    for i in (income_records, payment_records):
+        
+        time_records = select_time(i, button1)
+        # print("TIME", time_records)
+        category_records = select_category(time_records, button2)
+        # print("CATE", category_records)
+
+        if button2 == '儲值記錄':
+            selected.append(category_records)
+        else:
+            if button3 == '-無-':
+                selected.append(category_records)
+            else:
+                key_records = select_key(category_records, button3, button4)
+                selected.append(key_records)
+    # print(time_records)
+    # print(selected[0])
+
+    # 將篩選結果轉換為清單儲存
+    def output_records(records):
+        output = []
+
+        for i in range(len(records)):
+            date = records[i].get('Time')
+            # account = records[i].get('Exchange Account')[:9]
+            account = re.findall(r"^[A-Za-z0-9]*", records[i].get('Exchange Account'))[0]
+            category = records[i].get('category')
+            description = records[i].get('Description')
+            amount = int(records[i].get('Amount'))
+            temp = [date, account, category, description, amount]
+            output.append(temp)
+        
+        return output
+    
+
+    if mode == 1:
+        result_income = output_records(selected[0])  # 檢索結果：收入
+        return result_income
+    elif mode == 2:
+        result_payment = output_records(selected[1]) # 檢索結果：支出
+        return result_payment
 
 
 def getBalance():

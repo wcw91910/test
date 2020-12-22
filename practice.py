@@ -1,6 +1,7 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from pprint import pprint
+import re
 scope = ['https://spreadsheets.google.com/feeds','https://www.googleapis.com/auth/spreadsheets',
 'https://www.googleapis.com/auth/drive.file','https://www.googleapis.com/auth/drive']
 
@@ -143,7 +144,7 @@ for i in (income_records, payment_records):
             key_records = select_key(category_records, button3, button4)
             selected.append(key_records)
 # print(time_records)
-print(selected)
+print(selected[0])
 
 # 將篩選結果轉換為清單儲存
 def output_records(records):
@@ -151,7 +152,8 @@ def output_records(records):
 
     for i in range(len(records)):
         date = records[i].get('Time')
-        account = records[i].get('Exchange Account')
+        # account = records[i].get('Exchange Account')[:9]
+        account = re.findall(r"^[A-Za-z0-9]*", records[i].get('Exchange Account'))[0]
         category = records[i].get('category')
         description = records[i].get('Description')
         amount = int(records[i].get('Amount'))
@@ -161,6 +163,6 @@ def output_records(records):
     return output
 
 result_income = output_records(selected[0])  # 檢索結果：收入
-print(result_income)
-# result_payment = output_records(selected[1]) # 檢索結果：支出
+# print(result_income)
+result_payment = output_records(selected[1]) # 檢索結果：支出
 # print(result_payment)
