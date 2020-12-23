@@ -142,4 +142,6 @@ def abort_mission(mission_index):
 # abort_mission("13")
 # for i in range(2, 14):
 #     print(click_accepted_mission_from_mission_inquiry(i))
-print(click_accepted_mission_from_mission_inquiry(10))
+# print(click_accepted_mission_from_mission_inquiry(10))
+abort_mission("13")
+# accept_mission("admin","13")
