@@ -2011,7 +2011,7 @@ def taskSys_showTaskDetails(event, mode):
         Img_taskSys_showTaskDetails_giveUp = tk.PhotoImage(file = "放棄任務.png")
         giveUpBtn = tk.Button(taskSys_showTaskDetailsWin)
         giveUpBtn.config(image = Img_taskSys_showTaskDetails_giveUp, width = 152, height = 32)
-        giveUpBtn.config(relief = "flat", cursor = "hand2")
+        giveUpBtn.config(relief = "flat", cursor = "hand2", command = taskSys_showTaskDetailsWin.destroy)
         giveUpBtn.place(anchor = "center", x = 624, y = 150)
     
     # 標題
