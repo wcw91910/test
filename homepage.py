@@ -1827,7 +1827,7 @@ def taskSys_establish_mission(submitter_account, mission_name, mission_content, 
     mission_index = int(len(sheet.col_values(1)))+1
     status = "on-going"
     account = submitter_account
-    lst = [mission_index, account, mission_name, mission_content, payment, status, sub_time_create]
+    lst = [mission_index, account, mission_name, mission_content, payment, status, sub_time_create, "N/A"]
     sheet.append_row(lst)
 
 
@@ -2091,12 +2091,13 @@ def taskSys_get_users_tasks():
     display_list = []
     for i in range(len(sheet.col_values(1))):
         i +=1
-        accepter_in_list = sheet.cell(i,8).value
-        status = sheet.cell(i,6).value
+        row_list = sheet.row_values(i)
+        accepter_in_list = row_list[7]
+        status = row_list[5]
         if accepter_in_list == accepter_account and status == "taken":
-            mission_index = sheet.cell(i,1).value
-            mission_name = sheet.cell(i,3).value
-            mission_pay = sheet.cell(i,5).value
+            mission_index = row_list[0]
+            mission_name = row_list[2] 
+            mission_pay = row_list[4] 
             lst = [mission_index, mission_name, mission_pay]
             display_list.append(lst)
     return display_list
@@ -2135,10 +2136,11 @@ def taskSys_get_tasks_details(mission_index):
     client = getClient()
     ficher = client.open("NTU Coin").worksheet("Missions")
     mission_row = ficher.find(mission_index).row
-    index = ficher.cell(mission_row,1).value
-    name = ficher.cell(mission_row,3).value
-    content = ficher.cell(mission_row,4).value
-    payment = ficher.cell(mission_row,5).value
+    row_list = ficher.row_values(mission_row)
+    index = row_list[0]
+    name = row_list[2]
+    content = row_list[3]
+    payment = row_list[4]
     lst = [index, name, content, payment]
     return lst
 
@@ -2149,21 +2151,24 @@ def taskSys_finish_mission(mission_index):
     # 要餵mission index給這個函數，因為一個人可以同時具有多個正在執行的任務。挑選到要提交的任務之後傳出mission index由此接收
     sub_time_finish = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
     row = sheet.find(mission_index).row
+    row_list = sheet.row_values(row)
     status = "finished"
     sheet.update_cell(row,6,status)
     sheet.update_cell(row,7,sub_time_finish)
     def pay(mission_index):
         # 將交易開始與結束移轉到紀錄系統
         # 將交易金額記錄到使用者即時資料庫
-        mission_name = sheet.cell(row,3).value
-        mission_content = sheet.cell(row,4).value
-        provider = sheet.cell(row,2).value
-        accepter = sheet.cell(row,8).value
-        accounts_payable = sheet.cell(row,5).value
-        accounts_receivable = sheet.cell(row,5).value
+        mission_name = row_list[2]
+        mission_content = row_list[3]
+        provider = row_list[1]
+        accepter = row_list[7]
+        accounts_payable = row_list[4]
+        accounts_receivable = row_list[4]
         pay_time = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d %H:%M:%S')
-
+        client = getClient()
         user_info = client.open("NTU Coin").worksheet("User_Info")
+        mission_records = client.open("NTU Coin").worksheet("Mission Record")
+
         # 扣交付任務者錢
         user_info_row = user_info.find(provider).row
         balance = int(user_info.cell(user_info_row,5).value)
@@ -2175,7 +2180,6 @@ def taskSys_finish_mission(mission_index):
         balance_accepter += int(accounts_receivable)
         user_info.update_cell(user_info_row_accept,5,balance_accepter)
 
-        mission_records = client.open("NTU Coin").worksheet("Mission Record")
         # 紀錄登錄
         index = len(mission_records.col_values(2))+1
         cred1 = [index, "norm-",provider, accepter,-int(accounts_payable), pay_time, mission_name, mission_content]
