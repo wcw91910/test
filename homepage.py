@@ -584,7 +584,7 @@ def exchangeSys_normal():
     password.place(anchor = "w", x = 300, y = 370)
 
     # 備註欄
-    remarkTitle = tk.Label(exchangeSys_normal_Win, text = "備註")
+    remarkTitle = tk.Label(exchangeSys_normal_Win, text = "備註（限10個中文字內）")
     remarkTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
     remarkTitle.place(anchor = "w", x = 300, y = 420)
 
@@ -626,6 +626,14 @@ def exchangeSys_normal():
     exchangeSys_normal_Win_passwordWarning = tk.Label(exchangeSys_normal_Win, textvariable = exchangeSys_normal_Win_pW)
     exchangeSys_normal_Win_passwordWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
     exchangeSys_normal_Win_passwordWarning.place(anchor = "w", x = 300, y = 395)
+
+    # 檢查密碼確認欄
+    global exchangeSys_normal_Win_rW
+    exchangeSys_normal_Win_rW = tk.StringVar()
+    exchangeSys_normal_Win_rW.set("")
+    exchangeSys_normal_Win_remarkWarning = tk.Label(exchangeSys_normal_Win, textvariable = exchangeSys_normal_Win_rW)
+    exchangeSys_normal_Win_remarkWarning.config(font = "微軟正黑體 10", bg = "#363636", fg = "red")
+    exchangeSys_normal_Win_remarkWarning.place(anchor = "w", x = 300, y = 475)
 
 
 def exchangeSys_normal_check():
@@ -702,8 +710,19 @@ def exchangeSys_normal_check():
             exchangeSys_normal_Win_pW.set("❕ 交易密碼錯誤")
             password_accepted = False
 
+    exchange_remark = exchangeSys_normal_Win_remarkText.get()
+    if is_all_chinese(exchange_remark):
+        if len(exchange_remark) > 10:
+            exchangeSys_normal_Win_rW.set("❕ 備註過長")
+            remark_accepted = False
+        else:
+            remark_accepted = True
+    else:
+        exchangeSys_normal_Win_rW.set("❕ 備註不符合格式")
+        remark_accepted = False
+
     # 輸入內容檢查通過
-    if account_accept and amount_accepted and password_accepted:
+    if account_accept and amount_accepted and password_accepted and remark_accepted:
         exchangeSys_whetherExchange()
 
 
@@ -1717,7 +1736,7 @@ def taskSys_releaseTask():
     name.place(anchor = "w", x = 300, y = 210)
 
     # 任務內容
-    contentTitle = tk.Label(taskSys_releaseTask_Win, text = "任務內容")
+    contentTitle = tk.Label(taskSys_releaseTask_Win, text = "任務內容（限140個字元內）")
     contentTitle.config(font = "微軟正黑體 14 bold", bg = "#363636", fg = "white")
     contentTitle.place(anchor = "w", x = 300, y = 260)
 
@@ -1782,38 +1801,47 @@ def taskSys_releaseTaskCheck():
     rightPayment = False
 
     # 檢查名稱
-    if len(name) > 10:
-        taskSys_releaseTask_Win_nameWarning.set("❕ 名稱過長")
-        rightName = False
+    if name == "":
+        taskSys_releaseTask_Win_nameWarning.set("❕ 此欄不得為空")
     else:
-        if is_all_chinese(name):
-            taskSys_releaseTask_Win_nameWarning.set("")
-            rightName = True
-        else:
-            taskSys_releaseTask_Win_nameWarning.set("❕ 名稱不符合格式")
+        if len(name) > 10:
+            taskSys_releaseTask_Win_nameWarning.set("❕ 名稱過長")
             rightName = False
+        else:
+            if is_all_chinese(name):
+                taskSys_releaseTask_Win_nameWarning.set("")
+                rightName = True
+            else:
+                taskSys_releaseTask_Win_nameWarning.set("❕ 名稱不符合格式")
+                rightName = False
 
     # 檢查內容
-    if len(content) > 140:
-        taskSys_releaseTask_Win_contentWarning.set("❕ 內容過長")
-        rightContent = False
+    if content == "":
+        taskSys_releaseTask_Win_contentWarning.set("❕ 此欄不得為空")
     else:
-        taskSys_releaseTask_Win_contentWarning.set("")
-        rightContent = True
+        if len(content) > 140:
+            taskSys_releaseTask_Win_contentWarning.set("❕ 內容過長")
+            rightContent = False
+        else:
+            taskSys_releaseTask_Win_contentWarning.set("")
+            rightContent = True
 
     # 檢查報酬
-    data = eval(payment)
-    left = data%1
-    if left != 0:
-        taskSys_releaseTask_Win_paymentWarning.set("❕ 請輸入正整數")
-        rightPayment = False
-    else:
-        if data > 0:
-            taskSys_releaseTask_Win_paymentWarning.set("")
-            rightPayment = True
-        else:
+    try:
+        data = eval(payment)
+        left = data%1
+        if left != 0:
             taskSys_releaseTask_Win_paymentWarning.set("❕ 請輸入正整數")
             rightPayment = False
+        else:
+            if data > 0:
+                taskSys_releaseTask_Win_paymentWarning.set("")
+                rightPayment = True
+            else:
+                taskSys_releaseTask_Win_paymentWarning.set("❕ 請輸入正整數")
+                rightPayment = False
+    except:
+        taskSys_releaseTask_Win_paymentWarning.set("❕ 請輸入正整數")
     
     if rightName and rightContent and rightPayment:
         taskSys_establish_mission(userInfo[1], name, content, payment)
@@ -2127,7 +2155,7 @@ def taskSys_abort_mission(mission_index):
     if sheet.cell(mission_row, 6).value == "taken":
         status = "on-going"
         sheet.update_cell(mission_row, 6, status)
-        sheet.update_cell(mission_row, 8, "")
+        sheet.update_cell(mission_row, 8, "N/A")
     taskSysWin.destroy()
 
 
@@ -2330,35 +2358,41 @@ def valueSys_moneyEntry_coin2money():
 
 def valueSys_moneyEntry_check_money2coin():
     """確認輸入的數字為正整數"""
-    data = eval(moneyEntry_money2coinText.get())
-    left = data%1
-    if left != 0:
-        moneyEntryW_money2coin.set("❕ 請輸入正整數")
-    else:
-        if data > 0:
-            valueSys_runMoney2coin()
-            valueSysWin.destroy()
-        else:
+    try:
+        data = eval(moneyEntry_money2coinText.get())
+        left = data%1
+        if left != 0:
             moneyEntryW_money2coin.set("❕ 請輸入正整數")
+        else:
+            if data > 0:
+                valueSys_runMoney2coin()
+                valueSysWin.destroy()
+            else:
+                moneyEntryW_money2coin.set("❕ 請輸入正整數")
+    except:
+        moneyEntryW_money2coin.set("❕ 請輸入正整數")
 
 
 def valueSys_moneyEntry_check_coin2money():
     """確認輸入的數字為正整數"""
-    balance = eval(getBalance())
-    data = eval(moneyEntryText_coin2moneyText.get())
-    left = data%1
+    try:
+        balance = eval(getBalance())
+        data = eval(moneyEntryText_coin2moneyText.get())
+        left = data%1
 
-    if left != 0:
-        moneyEntryW_coin2money.set("❕ 請輸入正整數")
-    else:
-        if data > 0:
-            if data > balance:
-                moneyEntryW_coin2money.set("❕ 餘額不足")
-            else:
-                valueSys_runCoin2money()
-                valueSysWin.destroy()
-        else:
+        if left != 0:
             moneyEntryW_coin2money.set("❕ 請輸入正整數")
+        else:
+            if data > 0:
+                if data > balance:
+                    moneyEntryW_coin2money.set("❕ 餘額不足")
+                else:
+                    valueSys_runCoin2money()
+                    valueSysWin.destroy()
+            else:
+                moneyEntryW_coin2money.set("❕ 請輸入正整數")
+    except:
+        moneyEntryW_coin2money.set("❕ 請輸入正整數")
 
 
 def valueSys_runMoney2coin():
